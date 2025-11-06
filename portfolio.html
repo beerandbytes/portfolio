@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ousama Merrakchi — Indie Dev Portfolio</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome (CDN) -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-Xx57DpQvXvGxQlA9bTHo9bHqOvzUw7+akTsfDlmMBh5SpSLeN6wSOGxGLqvqU3YfH7tWZpEJAKF9A3Vbm4PplQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background-color: #0b0b0d; } /* fallback */
+    /* glass style (reused across modal & timeline cards) */
+    .glass {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.04);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+      transition: transform 0.28s ease, box-shadow 0.28s ease;
+    }
+    .glass:hover { transform: translateY(-4px); box-shadow: 0 14px 40px rgba(0,0,0,0.65); }
+
+    /* gradient animation used in contact section */
+    @keyframes gradient-x {
+      0%,100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .animate-gradient-x { background-size: 200% 200%; animation: gradient-x 10s ease infinite; }
+
+    /* Icon hover glow */
+    .icon-hover {
+      transition: transform 0.28s ease, text-shadow 0.28s ease, color 0.28s ease;
+    }
+    .icon-hover:hover {
+      color: #ff915f;
+      transform: scale(1.14);
+      text-shadow: 0 0 10px rgba(255,145,95,0.45);
+    }
+
+    /* Timeline visuals */
+    .timeline {
+      position: relative;
+      padding-left: 3rem; /* room for dot */ }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 1.5rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.04), rgba(255,255,255,0.08));
+      border-radius: 2px;
+    }
+    .timeline-node {
+      position: relative;
+      margin-bottom: 2.5rem;
+      padding-left: 0.75rem;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.64s cubic-bezier(.2,.9,.2,1), transform 0.64s cubic-bezier(.2,.9,.2,1);
+    }
+    .timeline-node.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .node-dot {
+      position: absolute;
+      left: 1.5rem;
+      top: 0.8rem;
+      height: 14px;
+      width: 14px;
+      border-radius: 9999px;
+      background: radial-gradient(circle at 30% 30%, #ffd0b3, #ff8a44);
+      box-shadow: 0 10px 26px rgba(255,138,68,0.12), 0 2px 6px rgba(0,0,0,0.6);
+      transform: translateX(-50%);
+      border: 3px solid rgba(11,11,13,0.6);
+    }
+    .node-card {
+      margin-left: 3.5rem;
+    }
+
+    /* Skills section styles inspired by image */
+    .skills-section {
+      background-color: #000;
+      position: relative;
+      overflow: hidden;
+    }
+    .skills-section::before,
+    .skills-section::after {
+      content: '';
+      position: absolute;
+      background-color: #ffd700;
+      width: 200px;
+      height: 200px;
+      z-index: 1;
+    }
+    .skills-section::before {
+      top: 0;
+      left: 0;
+      clip-path: polygon(0 0, 100% 0, 0 100%);
+      transform: scaleX(-1);
+    }
+    .skills-section::after {
+      bottom: 0;
+      right: 0;
+      clip-path: polygon(0 100%, 100% 100%, 100% 0);
+    }
+    .skills-content {
+      position: relative;
+      z-index: 2;
+    }
+    .skill-card {
+      background-color: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .skill-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+    }
+    .skill-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 0.5rem;
+    }
+
+    /* responsive tweaks */
+    @media (max-width: 640px) {
+      .timeline { padding-left: 2.25rem; }
+      .timeline::before { left: 1.25rem; }
+      .node-card { margin-left: 2.75rem; }
+      .node-dot { left: 1.25rem; }
+      .skills-section::before,
+      .skills-section::after {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body class="text-white font-sans">
+
+  <!-- NAVBAR -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-gray-900/60 backdrop-blur-md border-b border-gray-800">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <h1 class="text-2xl font-bold text-orange-400 tracking-tight">Ousama<span class="text-white">M.</span></h1>
+      </div>
+      <div class="flex items-center gap-6">
+        <ul class="flex gap-6 text-gray-300">
+          <li><a href="#hero" class="hover:text-orange-400" data-i18n="nav-home">Home</a></li>
+          <li><a href="#story" class="hover:text-orange-400" data-i18n="nav-story">My Story</a></li>
+          <li><a href="#skills" class="hover:text-orange-400" data-i18n="nav-skills">Skills</a></li>
+          <li><a href="#experience" class="hover:text-orange-400" data-i18n="nav-experience">Experience</a></li>
+          <li><a href="#work" class="hover:text-orange-400" data-i18n="nav-work">Work</a></li>
+          <li><a href="#contact" class="hover:text-orange-400" data-i18n="nav-contact">Contact</a></li>
+        </ul>
+        <div class="flex items-center gap-2">
+          <select id="lang-switch" class="bg-gray-800 border border-gray-600 text-white px-2 py-1 rounded text-sm focus:outline-none focus:ring-2 focus:ring-orange-400">
+            <option value="en">EN</option>
+            <option value="es">ES</option>
+            <option value="fr">FR</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero" class="relative min-h-screen flex items-center justify-center text-center pt-24 pb-16">
+    <div id="vanta-hero" class="absolute inset-0 -z-10"></div>
+    <div class="relative z-10 max-w-3xl px-6">
+      <h2 class="text-5xl md:text-6xl font-bold mb-4" data-i18n="hero-greeting">Hey, I’m <span class="text-orange-400">Ousama</span> 👋</h2>
+      <p class="text-gray-300 mb-6 leading-relaxed" data-i18n="hero-desc">
+        Key Account & Country Manager turning into a FullStack dev — I build things with care, performance and attention to detail.
+      </p>
+      <a href="#work" class="bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-full font-semibold shadow" data-i18n="see-work">See My Work ↓</a>
+    </div>
+  </section>
+
+  <!-- MY STORY -->
+  <section id="story" class="relative py-28">
+    <div id="vanta-story" class="absolute inset-0 -z-10"></div>
+    <div class="relative z-10 max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold mb-6" data-i18n="story-title">My Story</h2>
+        <p class="text-gray-300 leading-relaxed" data-i18n="story-desc">
+          I discovered the web by tinkering with small projects and later combined commercial experience with FullStack training.
+          I focus on bringing product sense, performance and thoughtful UX to projects.
+        </p>
+      </div>
+      <div class="text-center mb-12">
+        <h3 class="text-2xl font-bold mb-4 text-orange-400">My Past PC Builds</h3>
+        <p class="text-gray-300 max-w-2xl mx-auto">From early custom rigs that sparked my passion for hardware to current setups blending aesthetics and performance—each build tells a chapter in my tech journey.</p>
+      </div>
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <!-- Build Card 1 -->
+        <article class="group relative rounded-2xl overflow-hidden bg-gray-800 shadow-lg hover:-translate-y-2 transition-transform cursor-pointer"
+                 onclick="openBuildModal('build1')">
+          <img src="https://i.imgur.com/E7BaYSF.jpeg" class="w-full h-56 object-cover" alt="Blue and Red Dual PC Build">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
+            <h4 class="text-white text-lg font-semibold">Blue and Red Dual PC Build</h4>
+            <p class="text-sm text-gray-300 mt-1">RGB Harmony</p>
+            <span class="mt-3 text-orange-400 font-semibold" data-i18n="view-build">View build →</span>
+          </div>
+        </article>
+
+        <!-- Build Card 2 -->
+        <article class="group relative rounded-2xl overflow-hidden bg-gray-800 shadow-lg hover:-translate-y-2 transition-transform cursor-pointer"
+                 onclick="openBuildModal('build2')">
+          <img src="https://i.imgur.com/YCnpIX8.jpeg" class="w-full h-56 object-cover" alt="Dragon White PC Build">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
+            <h4 class="text-white text-lg font-semibold">Dragon White PC Build</h4>
+            <p class="text-sm text-gray-300 mt-1">Elegant Fury</p>
+            <span class="mt-3 text-orange-400 font-semibold" data-i18n="view-build">View build →</span>
+          </div>
+        </article>
+
+        <!-- Build Card 3 -->
+        <article class="group relative rounded-2xl overflow-hidden bg-gray-800 shadow-lg hover:-translate-y-2 transition-transform cursor-pointer"
+                 onclick="openBuildModal('build3')">
+          <img src="https://i.imgur.com/FwZdrS5.jpeg" class="w-full h-56 object-cover" alt="Rick & Morty Green PC Build">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
+            <h4 class="text-white text-lg font-semibold">Rick & Morty Green PC Build</h4>
+            <p class="text-sm text-gray-300 mt-1">Portal Gun Vibes</p>
+            <span class="mt-3 text-orange-400 font-semibold" data-i18n="view-build">View build →</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="skills-section relative py-28">
+    <div class="skills-content max-w-6xl mx-auto px-6 text-center relative z-10">
+      <h2 class="text-4xl font-bold mb-6 text-white" data-i18n="skills-title">What I Do</h2>
+      <p class="text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto" data-i18n="skills-desc">
+        I am a FullStack developer with a background in business management and sales. I combine commercial experience with technical skills to build performant web applications. Currently transitioning fully into development while freelancing on exciting projects.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-6 max-w-4xl mx-auto">
+        <!-- Row 1 -->
+        <div class="skill-card">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML" class="skill-icon">
+          <p class="text-sm font-medium text-white">HTML</p>
+        </div>
+        <div class="skill-card">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS" class="skill-icon">
+          <p class="text-sm font-medium text-white">CSS</p>
+        </div>
+        <div class="skill-card">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" class="skill-icon">
+          <p class="text-sm font-medium text-white">PHP</p>
+        </div>
+        <div class="skill-card">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" class="skill-icon">
+          <p class="text-sm font-medium text-white">JavaScript</p>
+        </div>
+        <div class="skill-card">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" class="skill-icon">
+          <p class="text-sm font-medium text-white">React</p>
+        </div>
+        <!-- Row 2 -->
+        <div class="skill-card">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" class="skill-icon">
+          <p class="text-sm font-medium text-white">GitHub</p>
+        </div>
+        <div class="skill-card">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" class="skill-icon">
+          <p class="text-sm font-medium text-white">Node.js</p>
+        </div>
+        <div class="skill-card">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" alt="Firebase" class="skill-icon">
+          <p class="text-sm font-medium text-white">Firebase</p>
+        </div>
+        <div class="skill-card">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" class="skill-icon">
+          <p class="text-sm font-medium text-white">PostgreSQL</p>
+        </div>
+        <div class="skill-card">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" class="skill-icon">
+          <p class="text-sm font-medium text-white">Docker</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE (directly under My Story) -->
+  <section id="experience" class="relative py-12 bg-gradient-to-b from-transparent to-gray-900/12">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-start justify-between gap-6 mb-6">
+        <h3 class="text-3xl font-bold" data-i18n="exp-title">Experience</h3>
+        <div>
+          <a href="https://beerandbytes.github.io/cv-vanilla/" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-pink-500 px-4 py-2 rounded-full text-sm font-semibold shadow hover:opacity-95">
+            <i class="fa-solid fa-file-lines"></i>
+            <span data-i18n="resume-link">View full résumé →</span>
+          </a>
+        </div>
+      </div>
+
+      <p class="text-gray-400 mb-8 max-w-3xl" data-i18n="exp-desc">
+        Roles and summaries taken from my résumé. Scroll to see each timeline node animate into view.
+      </p>
+
+      <div class="timeline">
+        <!-- Node 1 -->
+        <div class="timeline-node" data-animate>
+          <div class="node-dot" aria-hidden="true"></div>
+          <div class="node-card glass rounded-2xl p-6">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h4 class="text-lg font-semibold text-white" data-i18n="job-title-1">Business Development Manager | SLIMBOOK (GRUPO ODIN SOLUCIONES INFORMÁTICAS)</h4>
+                <div class="text-sm text-gray-400 mt-1">APR 2025 - Present</div>
+              </div>
+            </div>
+            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2">
+              <li data-i18n="bullet-1-1">Managed key accounts, suppliers, and brand collaborations, securing MDF and finance funding to support sales initiatives.</li>
+              <li data-i18n="bullet-1-2">Successfully closed over 30 orders exceeding €3,000 each after attending key industry events like OpenExpo Madrid and OWN Valencia in 2025.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Node 2 -->
+        <div class="timeline-node" data-animate>
+          <div class="node-dot" aria-hidden="true"></div>
+          <div class="node-card glass rounded-2xl p-6">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h4 class="text-lg font-semibold text-white" data-i18n="job-title-2">Sales Manager | AMFYTECH SL</h4>
+                <div class="text-sm text-gray-400 mt-1">NOV 2024 - JAN 2025</div>
+              </div>
+            </div>
+            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2">
+              <li data-i18n="bullet-2-1">Generated over 400 qualified leads and secured three projects valued at more than €2 million, demonstrating rapid results delivery in a new market.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Node 3 -->
+        <div class="timeline-node" data-animate>
+          <div class="node-dot" aria-hidden="true"></div>
+          <div class="node-card glass rounded-2xl p-6">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h4 class="text-lg font-semibold text-white" data-i18n="job-title-3">WAREHOUSE ASSOCIATE | AMAZON ONDA VLC1</h4>
+                <div class="text-sm text-gray-400 mt-1">JUN 2024 - SEP 2024</div>
+              </div>
+            </div>
+            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2">
+              <li data-i18n="bullet-3-1">Picking of goods, stow, quality check, inventory.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Node 4 -->
+        <div class="timeline-node" data-animate>
+          <div class="node-dot" aria-hidden="true"></div>
+          <div class="node-card glass rounded-2xl p-6">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h4 class="text-lg font-semibold text-white" data-i18n="job-title-4">IBERIA Country Manager | DEEPCOOL BEIJING CO LTD</h4>
+                <div class="text-sm text-gray-400 mt-1">FEB 2023 - MAR 2024</div>
+              </div>
+            </div>
+            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2">
+              <li data-i18n="bullet-4-1">Led sales and import operations for the IBERIA channel, covering Spain, Portugal, and Southern France.</li>
+              <li data-i18n="bullet-4-2">Improved sales forecasting and quarterly analysis of product performance, directly influencing distribution strategy.</li>
+              <li data-i18n="bullet-4-3">Customer portfolio management, RMA assistance, feedback collection.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Node 5 -->
+        <div class="timeline-node" data-animate>
+          <div class="node-dot" aria-hidden="true"></div>
+          <div class="node-card glass rounded-2xl p-6">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h4 class="text-lg font-semibold text-white" data-i18n="job-title-5">PRODUCT MANAGER | COOLMOD INFORMATICA S.L</h4>
+                <div class="text-sm text-gray-400 mt-1">JAN 2019 - FEB 2023</div>
+              </div>
+            </div>
+            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2">
+              <li data-i18n="bullet-5-1">Managed hardware product categories, developed sales strategies, and performed regular checks to minimize over-aged stock.</li>
+              <li data-i18n="bullet-5-2">Planned and executed marketing strategies and promotions.</li>
+              <li data-i18n="bullet-5-3">Identified KPIs for new product launches, leading to increased profitability and market share.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Node 6 -->
+        <div class="timeline-node" data-animate>
+          <div class="node-dot" aria-hidden="true"></div>
+          <div class="node-card glass rounded-2xl p-6">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h4 class="text-lg font-semibold text-white" data-i18n="job-title-6">BACKEND INTERN | JMI BRUSSELS</h4>
+                <div class="text-sm text-gray-400 mt-1">JUL 2018 - OCT 2018</div>
+              </div>
+            </div>
+            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2">
+              <li data-i18n="bullet-6-1">Database design.</li>
+              <li data-i18n="bullet-6-2">Developed prototypes for web and mobile projects.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work" class="py-20 bg-gray-950">
+    <div class="max-w-6xl mx-auto px-6">
+      <h3 class="text-3xl font-bold text-center mb-12" data-i18n="featured-projects">Featured Projects</h3>
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <!-- Card 1 -->
+        <article class="group relative rounded-2xl overflow-hidden bg-gray-800 shadow-lg hover:-translate-y-2 transition-transform cursor-pointer"
+                 onclick="openModal('proj1')">
+          <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80" class="w-full h-56 object-cover" alt="DevConnect preview">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
+            <h4 class="text-white text-lg font-semibold">DevConnect</h4>
+            <p class="text-sm text-gray-300 mt-1">React · Firebase · Tailwind</p>
+            <span class="mt-3 text-orange-400 font-semibold" data-i18n="view-project">View project →</span>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="group relative rounded-2xl overflow-hidden bg-gray-800 shadow-lg hover:-translate-y-2 transition-transform cursor-pointer"
+                 onclick="openModal('proj2')">
+          <img src="https://images.unsplash.com/photo-1551033406-611cf9a28f67?auto=format&fit=crop&w=900&q=80" class="w-full h-56 object-cover" alt="Taskify preview">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
+            <h4 class="text-white text-lg font-semibold">Taskify</h4>
+            <p class="text-sm text-gray-300 mt-1">Vue · JS · CSS</p>
+            <span class="mt-3 text-orange-400 font-semibold" data-i18n="view-project">View project →</span>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="group relative rounded-2xl overflow-hidden bg-gray-800 shadow-lg hover:-translate-y-2 transition-transform cursor-pointer"
+                 onclick="openModal('proj3')">
+          <img src="https://images.unsplash.com/photo-1624996379671-b1b9c8793e4d?auto=format&fit=crop&w=900&q=80" class="w-full h-56 object-cover" alt="Portfolio v1 preview">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
+            <h4 class="text-white text-lg font-semibold">Portfolio v1</h4>
+            <p class="text-sm text-gray-300 mt-1">HTML · CSS · JS</p>
+            <span class="mt-3 text-orange-400 font-semibold" data-i18n="view-project">View project →</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT (modern glass card) -->
+  <section id="contact" class="relative min-h-[64vh] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-orange-500/18 via-purple-700/12 to-gray-950 animate-gradient-x" style="opacity:0.14"></div>
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute w-2 h-2 bg-orange-400/30 rounded-full blur-xl top-1/3 left-1/4 animate-ping"></div>
+      <div class="absolute w-3 h-3 bg-purple-400/30 rounded-full blur-xl top-2/3 right-1/4 animate-ping"></div>
+      <div class="absolute w-2 h-2 bg-blue-400/30 rounded-full blur-xl top-1/2 left-1/2 animate-pulse"></div>
+    </div>
+
+    <div class="relative z-10 glass rounded-3xl p-10 max-w-xl w-[92%] text-center border border-white/6 shadow-2xl">
+      <h3 class="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent" data-i18n="contact-title">
+        Let’s Build Something Together 🚀
+      </h3>
+      <p class="text-gray-300 mb-8" data-i18n="contact-desc">
+        I’m open to internships, collaborations, and opportunities where I can grow as a FullStack developer.
+      </p>
+      <a href="mailto:merakchioussama@gmail.com" class="inline-block bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 hover:opacity-90 transition-opacity text-white px-8 py-3 rounded-full font-semibold shadow-lg shadow-orange-500/20" data-i18n="say-hello">
+        ✉️ Say Hello
+      </a>
+      <div class="mt-10 flex justify-center gap-6">
+        <a href="https://github.com/beerandbytes" target="_blank" class="icon-hover text-3xl text-gray-200"><i class="fa-brands fa-github"></i></a>
+        <a href="https://linkedin.com/in/merakchioussama" target="_blank" class="icon-hover text-3xl text-gray-200"><i class="fa-brands fa-linkedin"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER (blends with contact gradient) -->
+  <footer class="bg-gradient-to-t from-gray-950 via-gray-900/64 to-transparent border-t border-gray-800">
+    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-gray-400" data-i18n="footer">© 2025 Ousama Merrakchi — Crafted with care & curiosity</p>
+      <div class="flex items-center gap-6">
+        <a href="https://github.com/beerandbytes" target="_blank" class="icon-hover text-gray-400 text-xl"><i class="fa-brands fa-github"></i></a>
+        <a href="https://linkedin.com/in/merakchioussama" target="_blank" class="icon-hover text-gray-400 text-xl"><i class="fa-brands fa-linkedin"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- PROJECT MODAL (glassmorphism) -->
+  <div id="projectModal" class="fixed inset-0 hidden items-center justify-center z-50 bg-black/60">
+    <div class="glass rounded-2xl max-w-3xl w-full mx-6 p-6 relative">
+      <button id="closeBtn" class="absolute top-4 right-4 text-gray-200 hover:text-white text-2xl">✕</button>
+      <img id="modalImage" src="" class="w-full max-h-72 object-cover rounded-lg shadow mb-4" alt="">
+      <h4 id="modalTitle" class="text-2xl font-bold mb-2"></h4>
+      <p id="modalDesc" class="text-gray-200 mb-4"></p>
+      <div id="modalTech" class="flex justify-center gap-4 mb-4"></div>
+      <div class="flex justify-between items-center">
+        <button id="prevBtn" class="px-4 py-2 rounded-md bg-white/5 hover:bg-white/10">← Prev</button>
+        <button id="nextBtn" class="px-4 py-2 rounded-md bg-white/5 hover:bg-white/10">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUILD MODAL (glassmorphism) -->
+  <div id="buildModal" class="fixed inset-0 hidden items-center justify-center z-50 bg-black/60">
+    <div class="glass rounded-2xl max-w-3xl w-full mx-6 p-6 relative">
+      <button id="closeBuildBtn" class="absolute top-4 right-4 text-gray-200 hover:text-white text-2xl">✕</button>
+      <img id="buildModalImage" src="" class="w-full max-h-72 object-cover rounded-lg shadow mb-4" alt="">
+      <h4 id="buildModalTitle" class="text-2xl font-bold mb-2"></h4>
+      <p id="buildModalDesc" class="text-gray-200 mb-4"></p>
+      <div class="flex justify-between items-center">
+        <button id="prevBuildBtn" class="px-4 py-2 rounded-md bg-white/5 hover:bg-white/10">← Prev</button>
+        <button id="nextBuildBtn" class="px-4 py-2 rounded-md bg-white/5 hover:bg-white/10">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VANTA + Dependencies (correct order) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.birds.min.js"></script>
+  <!-- p5 is required before vanta.trunk -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.trunk.min.js"></script>
+
+  <script>
+    /* ----------------- VANTA BACKGROUNDS ----------------- */
+    window.addEventListener('load', () => {
+      try {
+        VANTA.BIRDS({
+          el: "#vanta-hero",
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.00,
+          minWidth: 200.00,
+          backgroundColor: 0x0d0d0f,
+          color1: 0x955dc0,
+          color2: 0xd720d,
+          birdSize: 1.6,
+          wingSpan: 26.00,
+          alignment: 18.00,
+          cohesion: 28.00
+        });
+      } catch (e) { console.warn('Vanta birds failed', e); }
+
+      try {
+        VANTA.TRUNK({
+          el: "#vanta-story",
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.00,
+          minWidth: 200.00,
+          scale: 1.0,
+          scaleMobile: 1.0,
+          color: 0x457598,
+          backgroundColor: 0x0,
+          chaos: 6.5
+        });
+      } catch (e) { console.warn('Vanta trunk failed', e); }
+    });
+
+    /* ----------------- Language Translations ----------------- */
+    const translations = {
+      en: {
+        'nav-home': 'Home',
+        'nav-story': 'My Story',
+        'nav-skills': 'Skills',
+        'nav-experience': 'Experience',
+        'nav-work': 'Work',
+        'nav-contact': 'Contact',
+        'hero-greeting': 'Hey, I’m <span class="text-orange-400">Ousama</span> 👋',
+        'hero-desc': 'Key Account & Country Manager turning into a FullStack dev — I build things with care, performance and attention to detail.',
+        'see-work': 'See My Work ↓',
+        'story-title': 'My Story',
+        'story-desc': 'I discovered the web by tinkering with small projects and later combined commercial experience with FullStack training. I focus on bringing product sense, performance and thoughtful UX to projects.',
+        'skills-title': 'What I Do',
+        'skills-desc': 'I am a FullStack developer with a background in business management and sales. I combine commercial experience with technical skills to build performant web applications. Currently transitioning fully into development while freelancing on exciting projects.',
+        'exp-title': 'Experience',
+        'exp-desc': 'Roles and summaries taken from my résumé. Scroll to see each timeline node animate into view.',
+        'resume-link': 'View full résumé →',
+        'job-title-1': 'Business Development Manager | SLIMBOOK (GRUPO ODIN SOLUCIONES INFORMÁTICAS)',
+        'bullet-1-1': 'Managed key accounts, suppliers, and brand collaborations, securing MDF and finance funding to support sales initiatives.',
+        'bullet-1-2': 'Successfully closed over 30 orders exceeding €3,000 each after attending key industry events like OpenExpo Madrid and OWN Valencia in 2025.',
+        'job-title-2': 'Sales Manager | AMFYTECH SL',
+        'bullet-2-1': 'Generated over 400 qualified leads and secured three projects valued at more than €2 million, demonstrating rapid results delivery in a new market.',
+        'job-title-3': 'WAREHOUSE ASSOCIATE | AMAZON ONDA VLC1',
+        'bullet-3-1': 'Picking of goods, stow, quality check, inventory.',
+        'job-title-4': 'IBERIA Country Manager | DEEPCOOL BEIJING CO LTD',
+        'bullet-4-1': 'Led sales and import operations for the IBERIA channel, covering Spain, Portugal, and Southern France.',
+        'bullet-4-2': 'Improved sales forecasting and quarterly analysis of product performance, directly influencing distribution strategy.',
+        'bullet-4-3': 'Customer portfolio management, RMA assistance, feedback collection.',
+        'job-title-5': 'PRODUCT MANAGER | COOLMOD INFORMATICA S.L',
+        'bullet-5-1': 'Managed hardware product categories, developed sales strategies, and performed regular checks to minimize over-aged stock.',
+        'bullet-5-2': 'Planned and executed marketing strategies and promotions.',
+        'bullet-5-3': 'Identified KPIs for new product launches, leading to increased profitability and market share.',
+        'job-title-6': 'BACKEND INTERN | JMI BRUSSELS',
+        'bullet-6-1': 'Database design.',
+        'bullet-6-2': 'Developed prototypes for web and mobile projects.',
+        'featured-projects': 'Featured Projects',
+        'view-project': 'View project →',
+        'view-build': 'View build →',
+        'contact-title': 'Let’s Build Something Together 🚀',
+        'contact-desc': 'I’m open to internships, collaborations, and opportunities where I can grow as a FullStack developer.',
+        'say-hello': '✉️ Say Hello',
+        'footer': '© 2025 Ousama Merrakchi — Crafted with care & curiosity'
+      },
+      es: {
+        'nav-home': 'Inicio',
+        'nav-story': 'Mi Historia',
+        'nav-skills': 'Habilidades',
+        'nav-experience': 'Experiencia',
+        'nav-work': 'Trabajo',
+        'nav-contact': 'Contacto',
+        'hero-greeting': '¡Hola, soy <span class="text-orange-400">Ousama</span>! 👋',
+        'hero-desc': 'Gerente de Cuentas Clave y País convirtiéndome en dev FullStack — Construyo cosas con cuidado, rendimiento y atención al detalle.',
+        'see-work': 'Ver Mi Trabajo ↓',
+        'story-title': 'Mi Historia',
+        'story-desc': 'Descubrí la web tinkereando con pequeños proyectos y luego combiné experiencia comercial con formación FullStack. Me enfoco en aportar visión de producto, rendimiento y UX pensada a los proyectos.',
+        'skills-title': 'Qué Hago',
+        'skills-desc': 'Soy un desarrollador FullStack con experiencia en gestión empresarial y ventas. Combino experiencia comercial con habilidades técnicas para construir aplicaciones web de alto rendimiento. Actualmente en transición completa hacia el desarrollo mientras freelance en proyectos emocionantes.',
+        'exp-title': 'Experiencia',
+        'exp-desc': 'Roles y resúmenes tomados de mi currículum. Desplázate para ver cada nodo de la línea de tiempo animarse en vista.',
+        'resume-link': 'Ver currículum completo →',
+        'job-title-1': 'Gerente de Desarrollo de Negocios | SLIMBOOK (GRUPO ODIN SOLUCIONES INFORMÁTICAS)',
+        'bullet-1-1': 'Gestioné cuentas clave, proveedores y colaboraciones de marca, asegurando financiación MDF y financiera para apoyar iniciativas de ventas.',
+        'bullet-1-2': 'Cerré exitosamente más de 30 pedidos que excedían los €3.000 cada uno después de asistir a eventos clave de la industria como OpenExpo Madrid y OWN Valencia en 2025.',
+        'job-title-2': 'Gerente de Ventas | AMFYTECH SL',
+        'bullet-2-1': 'Generé más de 400 leads cualificados y aseguré tres proyectos valorados en más de €2 millones, demostrando entrega rápida de resultados en un nuevo mercado.',
+        'job-title-3': 'ASOCIADO DE ALMACÉN | AMAZON ONDA VLC1',
+        'bullet-3-1': 'Recogida de mercancías, estiba, control de calidad, inventario.',
+        'job-title-4': 'Gerente de País IBERIA | DEEPCOOL BEIJING CO LTD',
+        'bullet-4-1': 'Lideré operaciones de ventas e importación para el canal IBERIA, cubriendo España, Portugal y el sur de Francia.',
+        'bullet-4-2': 'Mejoré la previsión de ventas y el análisis trimestral del rendimiento de productos, influyendo directamente en la estrategia de distribución.',
+        'bullet-4-3': 'Gestión de cartera de clientes, asistencia en RMA, recopilación de feedback.',
+        'job-title-5': 'GERENTE DE PRODUCTO | COOLMOD INFORMATICA S.L',
+        'bullet-5-1': 'Gestioné categorías de productos de hardware, desarrollé estrategias de ventas y realicé revisiones regulares para minimizar stock envejecido.',
+        'bullet-5-2': 'Planifiqué y ejecuté estrategias de marketing y promociones.',
+        'bullet-5-3': 'Identifiqué KPIs para lanzamientos de nuevos productos, lo que llevó a un aumento de la rentabilidad y cuota de mercado.',
+        'job-title-6': 'PASANTE BACKEND | JMI BRUSSELS',
+        'bullet-6-1': 'Diseño de bases de datos.',
+        'bullet-6-2': 'Desarrollé prototipos para proyectos web y móviles.',
+        'featured-projects': 'Proyectos Destacados',
+        'view-project': 'Ver proyecto →',
+        'view-build': 'Ver build →',
+        'contact-title': 'Construyamos Algo Juntos 🚀',
+        'contact-desc': 'Estoy abierto a prácticas, colaboraciones y oportunidades donde pueda crecer como desarrollador FullStack.',
+        'say-hello': '✉️ Di Hola',
+        'footer': '© 2025 Ousama Merrakchi — Creado con cuidado y curiosidad'
+      },
+      fr: {
+        'nav-home': 'Accueil',
+        'nav-story': 'Mon Histoire',
+        'nav-skills': 'Compétences',
+        'nav-experience': 'Expérience',
+        'nav-work': 'Projets',
+        'nav-contact': 'Contact',
+        'hero-greeting': 'Salut, je suis <span class="text-orange-400">Ousama</span> 👋',
+        'hero-desc': 'Responsable de comptes clés et pays en transition vers dev FullStack — Je construis des choses avec soin, performance et attention aux détails.',
+        'see-work': 'Voir Mon Travail ↓',
+        'story-title': 'Mon Histoire',
+        'story-desc': "J'ai découvert le web en bidouillant de petits projets et j'ai ensuite combiné mon expérience commerciale avec une formation FullStack. Je me concentre sur l'apport de sens produit, performance et UX réfléchie aux projets.",
+        'skills-title': 'Ce Que Je Fais',
+        'skills-desc': 'Je suis un développeur FullStack avec un parcours en gestion d\'entreprise et en ventes. J\'associe expérience commerciale et compétences techniques pour créer des applications web performantes. Actuellement en pleine transition vers le développement tout en freelance sur des projets passionnants.',
+        'exp-title': 'Expérience',
+        'exp-desc': "Rôles et résumés tirés de mon CV. Faites défiler pour voir chaque nœud de la timeline s'animer en vue.",
+        'resume-link': 'Voir CV complet →',
+        'job-title-1': 'Responsable du Développement Commercial | SLIMBOOK (GRUPO ODIN SOLUCIONES INFORMÁTICAS)',
+        'bullet-1-1': 'Géré les comptes clés, fournisseurs et collaborations de marque, obtenant des financements MDF et financiers pour soutenir les initiatives de vente.',
+        'bullet-1-2': 'Fermé avec succès plus de 30 commandes dépassant 3 000 € chacune après avoir assisté à des événements clés de l\'industrie comme OpenExpo Madrid et OWN Valencia en 2025.',
+        'job-title-2': 'Responsable des Ventes | AMFYTECH SL',
+        'bullet-2-1': 'Généré plus de 400 leads qualifiés et sécurisé trois projets valant plus de 2 millions d’euros, démontrant une livraison rapide de résultats sur un nouveau marché.',
+        'job-title-3': "ASSOCIÉ D'ENTREPÔT | AMAZON ONDA VLC1",
+        'bullet-3-1': 'Ramassage de marchandises, rangement, contrôle qualité, inventaire.',
+        'job-title-4': 'Responsable Pays IBERIA | DEEPCOOL BEIJING CO LTD',
+        'bullet-4-1': 'Dirigé les opérations de vente et d’importation pour le canal IBERIA, couvrant l’Espagne, le Portugal et le sud de la France.',
+        'bullet-4-2': 'Amélioré la prévision des ventes et l’analyse trimestrielle des performances des produits, influençant directement la stratégie de distribution.',
+        'bullet-4-3': 'Gestion du portefeuille clients, assistance RMA, collecte de feedback.',
+        'job-title-5': 'RESPONSABLE PRODUIT | COOLMOD INFORMATICA S.L',
+        'bullet-5-1': 'Géré les catégories de produits hardware, développé des stratégies de vente et effectué des contrôles réguliers pour minimiser le stock obsolète.',
+        'bullet-5-2': 'Planifié et exécuté des stratégies marketing et promotions.',
+        'bullet-5-3': 'Identifié les KPIs pour les lancements de nouveaux produits, menant à une augmentation de la rentabilité et de la part de marché.',
+        'job-title-6': 'STAGIAIRE BACKEND | JMI BRUSSELS',
+        'bullet-6-1': 'Conception de base de données.',
+        'bullet-6-2': 'Développé des prototypes pour des projets web et mobile.',
+        'featured-projects': 'Projets Phares',
+        'view-project': 'Voir le projet →',
+        'view-build': 'Voir le build →',
+        'contact-title': 'Construisons Quelque Chose Ensemble 🚀',
+        'contact-desc': 'Je suis ouvert aux stages, collaborations et opportunités où je peux grandir en tant que développeur FullStack.',
+        'say-hello': '✉️ Dis Bonjour',
+        'footer': '© 2025 Ousama Merrakchi — Créé avec soin et curiosité'
+      }
+    };
+
+    const descs = {
+      en: {
+        proj1: 'A social hub for developers to share projects and collaborate.',
+        proj2: 'A productivity app focused on simplicity and animation fluidity.',
+        proj3: 'My first portfolio experiment focused on storytelling and layout.'
+      },
+      es: {
+        proj1: 'Un hub social para desarrolladores donde compartir proyectos y colaborar.',
+        proj2: 'Una app de productividad enfocada en la simplicidad y la fluidez de las animaciones.',
+        proj3: 'Mi primer experimento de portfolio enfocado en la narración y el diseño.'
+      },
+      fr: {
+        proj1: 'Un hub social pour les développeurs pour partager des projets et collaborer.',
+        proj2: 'Une app de productivité axée sur la simplicité et la fluidité des animations.',
+        proj3: 'Mon premier essai de portfolio axé sur le storytelling et la mise en page.'
+      }
+    };
+
+    let currentLang = 'en';
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (translations[lang] && translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+      // Update modal if open
+      if (!document.getElementById('projectModal').classList.contains('hidden') && currentKey) {
+        updateModal(currentKey);
+      }
+      if (!document.getElementById('buildModal').classList.contains('hidden') && currentBuildKey) {
+        updateBuildModal(currentBuildKey);
+      }
+    }
+
+    // Language switcher
+    document.getElementById('lang-switch').addEventListener('change', (e) => {
+      setLanguage(e.target.value);
+    });
+
+    /* ----------------- Project Modal / Work data ----------------- */
+    const projects = {
+      proj1: {
+        title: "DevConnect",
+        image: "https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&fit=crop&w=900&q=80",
+        tech: [
+          "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+          "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
+          "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg"
+        ]
+      },
+      proj2: {
+        title: "Taskify",
+        image: "https://images.unsplash.com/photo-1551033406-611cf9a28f67?auto=format&fit=crop&w=900&q=80",
+        tech: [
+          "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg",
+          "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+          "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"
+        ]
+      },
+      proj3: {
+        title: "Portfolio v1",
+        image: "https://images.unsplash.com/photo-1624996379671-b1b9c8793e4d?auto=format&fit=crop&w=900&q=80",
+        tech: [
+          "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
+          "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
+          "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
+        ]
+      }
+    };
+
+    /* Modal elements */
+    const modal = document.getElementById("projectModal");
+    const modalImage = document.getElementById("modalImage");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalDesc = document.getElementById("modalDesc");
+    const modalTech = document.getElementById("modalTech");
+    let currentKey = null;
+
+    function updateModal(key) {
+      const p = projects[key];
+      const desc = descs[currentLang][key];
+      modalImage.src = p.image;
+      modalTitle.textContent = p.title;
+      modalDesc.textContent = desc;
+      modalTech.innerHTML = p.tech.map(src => `<img src="${src}" class='h-6 w-6' alt='tech'>`).join("");
+    }
+
+    function openModal(key) {
+      currentKey = key;
+      updateModal(key);
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      document.body.style.overflow = "";
+    }
+
+    document.getElementById("closeBtn").addEventListener("click", closeModal);
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      const keys = Object.keys(projects);
+      currentKey = keys[(keys.indexOf(currentKey) + 1) % keys.length];
+      updateModal(currentKey);
+    });
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      const keys = Object.keys(projects);
+      currentKey = keys[(keys.indexOf(currentKey) - 1 + keys.length) % keys.length];
+      updateModal(currentKey);
+    });
+
+    /* ----------------- Build Modal / Builds data ----------------- */
+    const builds = {
+      build1: {
+        title: "Blue and Red Dual PC Build",
+        desc: "My early dual-PC setup: a cool blue rig for daily tasks paired with a fiery red beast for gaming and rendering—my first dive into RGB synchronization.",
+        image: "https://i.imgur.com/E7BaYSF.jpeg"
+      },
+      build2: {
+        title: "Dragon White PC Build",
+        desc: "A sleek white chassis with dragon accents, featuring liquid cooling and panoramic glass—balancing minimalism with high-performance airflow.",
+        image: "https://i.imgur.com/YCnpIX8.jpeg"
+      },
+      build3: {
+        title: "Rick & Morty Green PC Build",
+        desc: "Fun meets function: neon green lighting, custom cable management, and pop culture flair with Rick and Morty figures—optimized for creative workflows.",
+        image: "https://i.imgur.com/FwZdrS5.jpeg"
+      }
+    };
+
+    /* Build Modal elements */
+    const buildModal = document.getElementById("buildModal");
+    const buildModalImage = document.getElementById("buildModalImage");
+    const buildModalTitle = document.getElementById("buildModalTitle");
+    const buildModalDesc = document.getElementById("buildModalDesc");
+    let currentBuildKey = null;
+
+    function updateBuildModal(key) {
+      const b = builds[key];
+      buildModalImage.src = b.image;
+      buildModalTitle.textContent = b.title;
+      buildModalDesc.textContent = b.desc;
+    }
+
+    function openBuildModal(key) {
+      currentBuildKey = key;
+      updateBuildModal(key);
+      buildModal.classList.remove("hidden");
+      buildModal.classList.add("flex");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeBuildModal() {
+      buildModal.classList.add("hidden");
+      buildModal.classList.remove("flex");
+      document.body.style.overflow = "";
+    }
+
+    document.getElementById("closeBuildBtn").addEventListener("click", closeBuildModal);
+    document.getElementById("nextBuildBtn").addEventListener("click", () => {
+      const keys = Object.keys(builds);
+      currentBuildKey = keys[(keys.indexOf(currentBuildKey) + 1) % keys.length];
+      updateBuildModal(currentBuildKey);
+    });
+    document.getElementById("prevBuildBtn").addEventListener("click", () => {
+      const keys = Object.keys(builds);
+      currentBuildKey = keys[(keys.indexOf(currentBuildKey) - 1 + keys.length) % keys.length];
+      updateBuildModal(currentBuildKey);
+    });
+
+    /* ----------------- Keyboard Navigation (shared for both modals) ----------------- */
+    document.addEventListener("keydown", e => {
+      // Project modal
+      if (!modal.classList.contains("hidden")) {
+        if (e.key === "Escape") closeModal();
+        if (e.key === "ArrowRight") document.getElementById("nextBtn").click();
+        if (e.key === "ArrowLeft") document.getElementById("prevBtn").click();
+      }
+      // Build modal
+      if (!buildModal.classList.contains("hidden")) {
+        if (e.key === "Escape") closeBuildModal();
+        if (e.key === "ArrowRight") document.getElementById("nextBuildBtn").click();
+        if (e.key === "ArrowLeft") document.getElementById("prevBuildBtn").click();
+      }
+    });
+
+    modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+    buildModal.addEventListener("click", e => { if (e.target === buildModal) closeBuildModal(); });
+
+    /* ----------------- Timeline reveal animation ----------------- */
+    const timelineNodes = document.querySelectorAll('.timeline-node');
+    const nodeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    }, { threshold: 0.18 });
+
+    // Observe after DOM ready
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.timeline-node').forEach(n => nodeObserver.observe(n));
+    });
+
+    /* ----------------- Small UX: fade sections in on scroll ----------------- */
+    const sections = document.querySelectorAll('section');
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('opacity-100','transition','duration-700');
+        else entry.target.classList.remove('opacity-100');
+      });
+    }, { threshold: 0.12 });
+    sections.forEach(s => {
+      s.classList.add('opacity-0');
+      sectionObserver.observe(s);
+    });
+
+    // Initialize language
+    setLanguage('en');
+  </script>
+</body>
+</html>
