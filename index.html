@@ -44,8 +44,9 @@
     }
     .icon-hover:hover {
       color: #ff915f;
-      transform: scale(1.14);
+      transform: scale(1.05);
       text-shadow: 0 0 10px rgba(255,145,95,0.45);
+      box-shadow: 0 4px 12px rgba(255,145,95,0.3);
     }
 
     /* Timeline visuals */
@@ -149,34 +150,115 @@
         width: 100px;
         height: 100px;
       }
+      /* Enhance navbar visibility on mobile */
+      #mobile-menu {
+        background-color: #111827 !important;
+      }
+      .mobile-menu-enter {
+        animation: slideDown 0.3s ease-out;
+      }
+      @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
     }
+
+    /* Modal styles */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: rgba(17,24,39,0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      max-w-lg w-full mx-4 p-6 max-h-[90vh] overflow-y-auto;
+      position: relative;
+    }
+    .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: #9ca3af;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .close-btn:hover { color: #ff915f; }
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav-btn:hover { background: rgba(255,145,95,0.2); }
+    #prevBtn { left: 1rem; }
+    #nextBtn { right: 1rem; }
   </style>
 </head>
 <body class="text-white font-sans">
 
   <!-- NAVBAR -->
-  <nav class="fixed top-0 left-0 right-0 z-50 bg-gray-900/60 backdrop-blur-md border-b border-gray-800">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+  <nav class="fixed top-0 left-0 right-0 z-50 md:bg-gray-900/60 bg-gray-900 backdrop-blur-md border-b border-gray-800">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between relative">
       <div class="flex items-center gap-3">
         <h1 class="text-2xl font-bold text-orange-400 tracking-tight">Ousama <span class="text-white">M.</span></h1>
       </div>
-      <div class="flex items-center gap-6">
-        <ul class="flex gap-6 text-gray-300">
-          <li><a href="#hero" class="hover:text-orange-400" data-i18n="nav-home">Home</a></li>
-          <li><a href="#story" class="hover:text-orange-400" data-i18n="nav-story">My Story</a></li>
-          <li><a href="#skills" class="hover:text-orange-400" data-i18n="nav-skills">Skills</a></li>
-          <li><a href="#experience" class="hover:text-orange-400" data-i18n="nav-experience">Experience</a></li>
-          <li><a href="#work" class="hover:text-orange-400" data-i18n="nav-work">Work</a></li>
-          <li><a href="#contact" class="hover:text-orange-400" data-i18n="nav-contact">Contact</a></li>
-        </ul>
-        <div class="flex items-center gap-2">
-          <select id="lang-switch" class="bg-gray-800 border border-gray-600 text-white px-2 py-1 rounded text-sm focus:outline-none focus:ring-2 focus:ring-orange-400">
-            <option value="en">EN</option>
-            <option value="es">ES</option>
-            <option value="fr">FR</option>
-          </select>
-        </div>
+
+      <!-- Desktop nav links -->
+      <ul class="hidden md:flex items-center gap-6 text-gray-300 mr-6">
+        <li><a href="#hero" class="hover:text-orange-400 transition-colors" data-i18n="nav-home">Home</a></li>
+        <li><a href="#story" class="hover:text-orange-400 transition-colors" data-i18n="nav-story">My Story</a></li>
+        <li><a href="#skills" class="hover:text-orange-400 transition-colors" data-i18n="nav-skills">Skills</a></li>
+        <li><a href="#experience" class="hover:text-orange-400 transition-colors" data-i18n="nav-experience">Experience</a></li>
+        <li><a href="#work" class="hover:text-orange-400 transition-colors" data-i18n="nav-work">Work</a></li>
+        <li><a href="#contact" class="hover:text-orange-400 transition-colors" data-i18n="nav-contact">Contact</a></li>
+      </ul>
+
+      <!-- Right side: mobile hamburger + language select -->
+      <div class="flex items-center gap-4">
+        <!-- Mobile hamburger button -->
+        <button id="mobile-menu-btn" 
+                class="md:hidden text-gray-300 hover:text-orange-400 focus:outline-none focus:text-orange-400 transition-colors min-w-[1.25rem] text-xl font-bold"
+                aria-label="Toggle menu">
+          ☰
+          <span class="sr-only">Menu</span>
+        </button>
+        <!-- Language select (always visible) -->
+        <select id="lang-switch" class="bg-gray-800 border border-gray-600 text-white px-2 py-1 rounded text-sm focus:outline-none focus:ring-2 focus:ring-orange-400">
+          <option value="en">EN</option>
+          <option value="es">ES</option>
+          <option value="fr">FR</option>
+        </select>
       </div>
+    </div>
+
+    <!-- Mobile menu dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden bg-gray-900 backdrop-blur-md border-b border-gray-800 px-6 py-4 absolute left-0 right-0 top-full z-40">
+      <ul class="flex flex-col space-y-4">
+        <li><a href="#hero" class="block py-2 text-gray-300 hover:text-orange-400 transition-colors" data-i18n="nav-home" onclick="closeMobileMenu()">Home</a></li>
+        <li><a href="#story" class="block py-2 text-gray-300 hover:text-orange-400 transition-colors" data-i18n="nav-story" onclick="closeMobileMenu()">My Story</a></li>
+        <li><a href="#skills" class="block py-2 text-gray-300 hover:text-orange-400 transition-colors" data-i18n="nav-skills" onclick="closeMobileMenu()">Skills</a></li>
+        <li><a href="#experience" class="block py-2 text-gray-300 hover:text-orange-400 transition-colors" data-i18n="nav-experience" onclick="closeMobileMenu()">Experience</a></li>
+        <li><a href="#work" class="block py-2 text-gray-300 hover:text-orange-400 transition-colors" data-i18n="nav-work" onclick="closeMobileMenu()">Work</a></li>
+        <li><a href="#contact" class="block py-2 text-gray-300 hover:text-orange-400 transition-colors" data-i18n="nav-contact" onclick="closeMobileMenu()">Contact</a></li>
+      </ul>
     </div>
   </nav>
 
@@ -184,60 +266,69 @@
   <section id="hero" class="relative min-h-screen flex items-center justify-center text-center pt-24 pb-16">
     <div id="vanta-hero" class="absolute inset-0 -z-10"></div>
     <div class="relative z-10 max-w-3xl px-6">
-      <h2 class="text-5xl md:text-6xl font-bold mb-4" data-i18n="hero-greeting">Hi, I’m <span class="text-orange-400">Ousama</span> 👋</h2>
-      <p class="text-white-800 mb-6 leading-relaxed" data-i18n="hero-desc">
+      <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4" data-i18n="hero-greeting">Hi, I’m <span class="text-orange-400">Ousama</span> 👋</h2>
+      <p class="text-white-800 mb-6 leading-relaxed text-sm sm:text-base" data-i18n="hero-desc">
         Currently Junior Web Dev / Ex Sales and Key account Manager / Ex Assembly Computer Technician — I am seeking new opportunities to start in the web development industry , performance and attention to detail.
       </p>
-      <a href="#work" class="bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-full font-semibold shadow" data-i18n="see-work">See My Work ↓</a>
+      <a href="#work" class="bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-full font-semibold shadow inline-block" data-i18n="see-work">See My Work ↓</a>
     </div>
   </section>
 
   <!-- MY STORY -->
-  <section id="story" class="relative py-28">
+  <section id="story" class="relative py-20 sm:py-28">
     <div id="vanta-story" class="absolute inset-0 -z-10"></div>
     <div class="relative z-10 max-w-6xl mx-auto px-6">
       <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold mb-6" data-i18n="story-title">My Story</h2>
-        <p class="text-gray-300 leading-relaxed" data-i18n="story-desc">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-6" data-i18n="story-title">My Story</h2>
+        <p class="text-gray-300 leading-relaxed text-sm sm:text-base" data-i18n="story-desc">
           I discovered the web by tinkering with small projects and later combined commercial experience with FullStack training.
           I focus on bringing product sense, performance and thoughtful UX to projects.
         </p>
       </div>
       <div class="text-center mb-12">
-        <h3 class="text-2xl font-bold mb-4 text-orange-400">My Past PC Builds</h3>
-        <p class="text-gray-300 max-w-2xl mx-auto">From early custom rigs that sparked my passion for hardware to current setups blending aesthetics and performance—each build tells a chapter in my tech journey.</p>
+        <h3 class="text-xl sm:text-2xl font-bold mb-4 text-orange-400">My Past PC Builds</h3>
+        <p class="text-gray-300 max-w-2xl mx-auto text-sm sm:text-base">From early custom rigs that sparked my passion for hardware to current setups blending aesthetics and performance—each build tells a chapter in my tech journey.</p>
       </div>
-      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <div class="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
         <!-- Build Card 1 -->
         <article class="group relative rounded-2xl overflow-hidden bg-gray-800 shadow-lg hover:-translate-y-2 transition-transform cursor-pointer"
                  onclick="openBuildModal('build1')">
-          <img src="https://i.imgur.com/E7BaYSF.jpeg" class="w-full h-56 object-cover" alt="Blue and Red Dual PC Build">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
-            <h4 class="text-white text-lg font-semibold">Blue and Red Dual PC Build</h4>
+          <img src="https://i.imgur.com/E7BaYSF.jpeg" class="w-full h-48 sm:h-56 object-cover" alt="Blue and Red Dual PC Build">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4 sm:p-6">
+            <h4 class="text-white text-base sm:text-lg font-semibold">Blue and Red Dual PC Build</h4>
             <p class="text-sm text-gray-300 mt-1">RGB Harmony</p>
-            <span class="mt-3 text-orange-400 font-semibold" data-i18n="view-build">View build →</span>
+            <a href="https://i.imgur.com/E7BaYSF.jpeg" target="_blank" rel="noopener noreferrer"
+               class="mt-3 inline-block bg-orange-500 hover:bg-orange-600 px-2 py-1 rounded-full text-[11px] font-semibold text-white transition-colors icon-hover">
+              View Original →
+            </a>
           </div>
         </article>
 
         <!-- Build Card 2 -->
         <article class="group relative rounded-2xl overflow-hidden bg-gray-800 shadow-lg hover:-translate-y-2 transition-transform cursor-pointer"
                  onclick="openBuildModal('build2')">
-          <img src="https://i.imgur.com/YCnpIX8.jpeg" class="w-full h-56 object-cover" alt="Dragon White PC Build">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
-            <h4 class="text-white text-lg font-semibold">Dragon White PC Build</h4>
+          <img src="https://i.imgur.com/YCnpIX8.jpeg" class="w-full h-48 sm:h-56 object-cover" alt="Dragon White PC Build">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4 sm:p-6">
+            <h4 class="text-white text-base sm:text-lg font-semibold">Dragon White PC Build</h4>
             <p class="text-sm text-gray-300 mt-1">Elegant Fury</p>
-            <span class="mt-3 text-orange-400 font-semibold" data-i18n="view-build">View build →</span>
+            <a href="https://i.imgur.com/YCnpIX8.jpeg" target="_blank" rel="noopener noreferrer"
+               class="mt-3 inline-block bg-orange-500 hover:bg-orange-600 px-2 py-1 rounded-full text-[11px] font-semibold text-white transition-colors icon-hover">
+              View Original →
+            </a>
           </div>
         </article>
 
         <!-- Build Card 3 -->
         <article class="group relative rounded-2xl overflow-hidden bg-gray-800 shadow-lg hover:-translate-y-2 transition-transform cursor-pointer"
                  onclick="openBuildModal('build3')">
-          <img src="https://i.imgur.com/FwZdrS5.jpeg" class="w-full h-56 object-cover" alt="Rick & Morty Green PC Build">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
-            <h4 class="text-white text-lg font-semibold">Rick & Morty Green PC Build</h4>
+          <img src="https://i.imgur.com/FwZdrS5.jpeg" class="w-full h-48 sm:h-56 object-cover" alt="Rick & Morty Green PC Build">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4 sm:p-6">
+            <h4 class="text-white text-base sm:text-lg font-semibold">Rick & Morty Green PC Build</h4>
             <p class="text-sm text-gray-300 mt-1">Portal Gun Vibes</p>
-            <span class="mt-3 text-orange-400 font-semibold" data-i18n="view-build">View build →</span>
+            <a href="https://i.imgur.com/FwZdrS5.jpeg" target="_blank" rel="noopener noreferrer"
+               class="mt-3 inline-block bg-orange-500 hover:bg-orange-600 px-2 py-1 rounded-full text-[11px] font-semibold text-white transition-colors icon-hover">
+              View Original →
+            </a>
           </div>
         </article>
       </div>
@@ -245,64 +336,64 @@
   </section>
 
   <!-- SKILLS -->
-  <section id="skills" class="skills-section relative py-28">
+  <section id="skills" class="skills-section relative py-20 sm:py-28">
     <div class="skills-content max-w-6xl mx-auto px-6 text-center relative z-10">
-      <h2 class="text-4xl font-bold mb-6 text-white" data-i18n="skills-title">What I Do</h2>
-      <p class="text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto" data-i18n="skills-desc">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-white" data-i18n="skills-title">What I Do</h2>
+      <p class="text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto text-sm sm:text-base" data-i18n="skills-desc">
         I am a FullStack developer with a background in business management and sales. I combine commercial experience with technical skills to build performant web applications. Currently transitioning fully into development while freelancing on exciting projects.
       </p>
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-6 max-w-4xl mx-auto">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6 max-w-4xl mx-auto">
         <!-- Row 1 -->
         <div class="skill-card">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML" class="skill-icon">
-          <p class="text-sm font-medium text-white">HTML</p>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML" class="skill-icon mx-auto">
+          <p class="text-xs sm:text-sm font-medium text-white">HTML</p>
         </div>
         <div class="skill-card">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS" class="skill-icon">
-          <p class="text-sm font-medium text-white">CSS</p>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS" class="skill-icon mx-auto">
+          <p class="text-xs sm:text-sm font-medium text-white">CSS</p>
         </div>
         <div class="skill-card">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" class="skill-icon">
-          <p class="text-sm font-medium text-white">PHP</p>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" class="skill-icon mx-auto">
+          <p class="text-xs sm:text-sm font-medium text-white">PHP</p>
         </div>
         <div class="skill-card">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" class="skill-icon">
-          <p class="text-sm font-medium text-white">JavaScript</p>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" class="skill-icon mx-auto">
+          <p class="text-xs sm:text-sm font-medium text-white">JavaScript</p>
         </div>
         <div class="skill-card">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" class="skill-icon">
-          <p class="text-sm font-medium text-white">React</p>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" class="skill-icon mx-auto">
+          <p class="text-xs sm:text-sm font-medium text-white">React</p>
         </div>
         <!-- Row 2 -->
         <div class="skill-card">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" class="skill-icon">
-          <p class="text-sm font-medium text-white">GitHub</p>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" class="skill-icon mx-auto">
+          <p class="text-xs sm:text-sm font-medium text-white">GitHub</p>
         </div>
         <div class="skill-card">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" class="skill-icon">
-          <p class="text-sm font-medium text-white">Node.js</p>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" class="skill-icon mx-auto">
+          <p class="text-xs sm:text-sm font-medium text-white">Node.js</p>
         </div>
         <div class="skill-card">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" alt="Firebase" class="skill-icon">
-          <p class="text-sm font-medium text-white">Firebase</p>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" alt="Firebase" class="skill-icon mx-auto">
+          <p class="text-xs sm:text-sm font-medium text-white">Firebase</p>
         </div>
         <div class="skill-card">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" class="skill-icon">
-          <p class="text-sm font-medium text-white">PostgreSQL</p>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" class="skill-icon mx-auto">
+          <p class="text-xs sm:text-sm font-medium text-white">PostgreSQL</p>
         </div>
         <div class="skill-card">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" class="skill-icon">
-          <p class="text-sm font-medium text-white">Docker</p>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" class="skill-icon mx-auto">
+          <p class="text-xs sm:text-sm font-medium text-white">Docker</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- EXPERIENCE (directly under My Story) -->
+  <!-- EXPERIENCE -->
   <section id="experience" class="relative py-12 bg-gradient-to-b from-transparent to-gray-900/12">
     <div class="max-w-6xl mx-auto px-6">
-      <div class="flex items-start justify-between gap-6 mb-6">
-        <h3 class="text-3xl font-bold" data-i18n="exp-title">Experience</h3>
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
+        <h3 class="text-2xl sm:text-3xl font-bold" data-i18n="exp-title">Experience</h3>
         <div>
           <a href="https://beerandbytes.github.io/cv-vanilla/" target="_blank" rel="noopener"
              class="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-pink-500 px-4 py-2 rounded-full text-sm font-semibold shadow hover:opacity-95">
@@ -312,7 +403,7 @@
         </div>
       </div>
 
-      <p class="text-gray-400 mb-8 max-w-3xl" data-i18n="exp-desc">
+      <p class="text-gray-400 mb-8 max-w-3xl text-sm sm:text-base" data-i18n="exp-desc">
         Roles and summaries taken from my résumé. Scroll to see each timeline node animate into view.
       </p>
 
@@ -320,14 +411,14 @@
         <!-- Node 1 -->
         <div class="timeline-node" data-animate>
           <div class="node-dot" aria-hidden="true"></div>
-          <div class="node-card glass rounded-2xl p-6">
+          <div class="node-card glass rounded-2xl p-4 sm:p-6">
             <div class="flex items-start justify-between gap-4">
-              <div>
-                <h4 class="text-lg font-semibold text-white" data-i18n="job-title-1">Business Development Manager | SLIMBOOK (GRUPO ODIN SOLUCIONES INFORMÁTICAS)</h4>
+              <div class="flex-1">
+                <h4 class="text-base sm:text-lg font-semibold text-white" data-i18n="job-title-1">Business Development Manager | SLIMBOOK (GRUPO ODIN SOLUCIONES INFORMÁTICAS)</h4>
                 <div class="text-sm text-gray-400 mt-1">APR 2025 - Present</div>
               </div>
             </div>
-            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2">
+            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2 text-sm">
               <li data-i18n="bullet-1-1">Managed key accounts, suppliers, and brand collaborations, securing MDF and finance funding to support sales initiatives.</li>
               <li data-i18n="bullet-1-2">Successfully closed over 30 orders exceeding €3,000 each after attending key industry events like OpenExpo Madrid and OWN Valencia in 2025.</li>
             </ul>
@@ -337,14 +428,14 @@
         <!-- Node 2 -->
         <div class="timeline-node" data-animate>
           <div class="node-dot" aria-hidden="true"></div>
-          <div class="node-card glass rounded-2xl p-6">
+          <div class="node-card glass rounded-2xl p-4 sm:p-6">
             <div class="flex items-start justify-between gap-4">
-              <div>
-                <h4 class="text-lg font-semibold text-white" data-i18n="job-title-2">Sales Manager | AMFYTECH SL</h4>
+              <div class="flex-1">
+                <h4 class="text-base sm:text-lg font-semibold text-white" data-i18n="job-title-2">Sales Manager | AMFYTECH SL</h4>
                 <div class="text-sm text-gray-400 mt-1">NOV 2024 - JAN 2025</div>
               </div>
             </div>
-            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2">
+            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2 text-sm">
               <li data-i18n="bullet-2-1">Generated over 400 qualified leads and secured three projects valued at more than €2 million, demonstrating rapid results delivery in a new market.</li>
             </ul>
           </div>
@@ -353,14 +444,14 @@
         <!-- Node 3 -->
         <div class="timeline-node" data-animate>
           <div class="node-dot" aria-hidden="true"></div>
-          <div class="node-card glass rounded-2xl p-6">
+          <div class="node-card glass rounded-2xl p-4 sm:p-6">
             <div class="flex items-start justify-between gap-4">
-              <div>
-                <h4 class="text-lg font-semibold text-white" data-i18n="job-title-3">WAREHOUSE ASSOCIATE | AMAZON ONDA VLC1</h4>
+              <div class="flex-1">
+                <h4 class="text-base sm:text-lg font-semibold text-white" data-i18n="job-title-3">WAREHOUSE ASSOCIATE | AMAZON ONDA VLC1</h4>
                 <div class="text-sm text-gray-400 mt-1">JUN 2024 - SEP 2024</div>
               </div>
             </div>
-            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2">
+            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2 text-sm">
               <li data-i18n="bullet-3-1">Picking of goods, stow, quality check, inventory.</li>
             </ul>
           </div>
@@ -369,14 +460,14 @@
         <!-- Node 4 -->
         <div class="timeline-node" data-animate>
           <div class="node-dot" aria-hidden="true"></div>
-          <div class="node-card glass rounded-2xl p-6">
+          <div class="node-card glass rounded-2xl p-4 sm:p-6">
             <div class="flex items-start justify-between gap-4">
-              <div>
-                <h4 class="text-lg font-semibold text-white" data-i18n="job-title-4">IBERIA Country Manager | DEEPCOOL BEIJING CO LTD</h4>
+              <div class="flex-1">
+                <h4 class="text-base sm:text-lg font-semibold text-white" data-i18n="job-title-4">IBERIA Country Manager | DEEPCOOL BEIJING CO LTD</h4>
                 <div class="text-sm text-gray-400 mt-1">FEB 2023 - MAR 2024</div>
               </div>
             </div>
-            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2">
+            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2 text-sm">
               <li data-i18n="bullet-4-1">Led sales and import operations for the IBERIA channel, covering Spain, Portugal, and Southern France.</li>
               <li data-i18n="bullet-4-2">Improved sales forecasting and quarterly analysis of product performance, directly influencing distribution strategy.</li>
               <li data-i18n="bullet-4-3">Customer portfolio management, RMA assistance, feedback collection.</li>
@@ -387,14 +478,14 @@
         <!-- Node 5 -->
         <div class="timeline-node" data-animate>
           <div class="node-dot" aria-hidden="true"></div>
-          <div class="node-card glass rounded-2xl p-6">
+          <div class="node-card glass rounded-2xl p-4 sm:p-6">
             <div class="flex items-start justify-between gap-4">
-              <div>
-                <h4 class="text-lg font-semibold text-white" data-i18n="job-title-5">PRODUCT MANAGER | COOLMOD INFORMATICA S.L</h4>
+              <div class="flex-1">
+                <h4 class="text-base sm:text-lg font-semibold text-white" data-i18n="job-title-5">PRODUCT MANAGER | COOLMOD INFORMATICA S.L</h4>
                 <div class="text-sm text-gray-400 mt-1">JAN 2019 - FEB 2023</div>
               </div>
             </div>
-            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2">
+            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2 text-sm">
               <li data-i18n="bullet-5-1">Managed hardware product categories, developed sales strategies, and performed regular checks to minimize over-aged stock.</li>
               <li data-i18n="bullet-5-2">Planned and executed marketing strategies and promotions.</li>
               <li data-i18n="bullet-5-3">Identified KPIs for new product launches, leading to increased profitability and market share.</li>
@@ -405,137 +496,132 @@
         <!-- Node 6 -->
         <div class="timeline-node" data-animate>
           <div class="node-dot" aria-hidden="true"></div>
-          <div class="node-card glass rounded-2xl p-6">
+          <div class="node-card glass rounded-2xl p-4 sm:p-6">
             <div class="flex items-start justify-between gap-4">
-              <div>
-                <h4 class="text-lg font-semibold text-white" data-i18n="job-title-6">BACKEND INTERN | JMI BRUSSELS</h4>
+              <div class="flex-1">
+                <h4 class="text-base sm:text-lg font-semibold text-white" data-i18n="job-title-6">BACKEND INTERN | JMI BRUSSELS</h4>
                 <div class="text-sm text-gray-400 mt-1">JUL 2018 - OCT 2018</div>
               </div>
             </div>
-            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2">
+            <ul class="mt-4 list-disc list-inside text-gray-300 space-y-2 text-sm">
               <li data-i18n="bullet-6-1">Database design.</li>
               <li data-i18n="bullet-6-2">Developed prototypes for web and mobile projects.</li>
             </ul>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- WORK -->
-  <section id="work" class="py-20 bg-gray-950">
+  <!-- WORK SECTION -->
+  <section id="work" class="relative py-20 sm:py-28 bg-gradient-to-b from-gray-900/50 to-transparent">
     <div class="max-w-6xl mx-auto px-6">
-      <h3 class="text-3xl font-bold text-center mb-12" data-i18n="featured-projects">Featured Projects</h3>
-      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        <!-- Card 1 -->
+      <div class="text-center mb-16">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-6" data-i18n="featured-projects">Featured Projects</h2>
+        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">A showcase of my recent work—click to explore or visit the source.</p>
+      </div>
+      <div class="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <!-- Project Card 1 -->
         <article class="group relative rounded-2xl overflow-hidden bg-gray-800 shadow-lg hover:-translate-y-2 transition-transform cursor-pointer"
                  onclick="openModal('proj1')">
-          <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80" class="w-full h-56 object-cover" alt="DevConnect preview">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
-            <h4 class="text-white text-lg font-semibold">DevConnect</h4>
-            <p class="text-sm text-gray-300 mt-1">React · Firebase · Tailwind</p>
-            <span class="mt-3 text-orange-400 font-semibold" data-i18n="view-project">View project →</span>
+          <img src="https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&fit=crop&w=900&q=80" class="w-full h-48 sm:h-56 object-cover" alt="DevConnect">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4 sm:p-6">
+            <h4 class="text-white text-base sm:text-lg font-semibold">DevConnect</h4>
+            <p class="text-sm text-gray-300 mt-1">Developer Collaboration Hub</p>
+            <a href="https://github.com/yourusername/devconnect" target="_blank" rel="noopener noreferrer"
+               class="mt-3 inline-block bg-orange-500 hover:bg-orange-600 px-2 py-1 rounded-full text-[11px] font-semibold text-white transition-colors icon-hover">
+              Visit Project →
+            </a>
           </div>
         </article>
 
-        <!-- Card 2 -->
+        <!-- Project Card 2 -->
         <article class="group relative rounded-2xl overflow-hidden bg-gray-800 shadow-lg hover:-translate-y-2 transition-transform cursor-pointer"
                  onclick="openModal('proj2')">
-          <img src="https://images.unsplash.com/photo-1551033406-611cf9a28f67?auto=format&fit=crop&w=900&q=80" class="w-full h-56 object-cover" alt="Taskify preview">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
-            <h4 class="text-white text-lg font-semibold">Taskify</h4>
-            <p class="text-sm text-gray-300 mt-1">Vue · JS · CSS</p>
-            <span class="mt-3 text-orange-400 font-semibold" data-i18n="view-project">View project →</span>
+          <img src="https://images.unsplash.com/photo-1551033406-611cf9a28f67?auto=format&fit=crop&w=900&q=80" class="w-full h-48 sm:h-56 object-cover" alt="Taskify">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4 sm:p-6">
+            <h4 class="text-white text-base sm:text-lg font-semibold">Taskify</h4>
+            <p class="text-sm text-gray-300 mt-1">Simple Productivity App</p>
+            <a href="https://github.com/yourusername/taskify" target="_blank" rel="noopener noreferrer"
+               class="mt-3 inline-block bg-orange-500 hover:bg-orange-600 px-2 py-1 rounded-full text-[11px] font-semibold text-white transition-colors icon-hover">
+              Visit Project →
+            </a>
           </div>
         </article>
 
-        <!-- Card 3 -->
+        <!-- Project Card 3 -->
         <article class="group relative rounded-2xl overflow-hidden bg-gray-800 shadow-lg hover:-translate-y-2 transition-transform cursor-pointer"
                  onclick="openModal('proj3')">
-          <img src="https://images.unsplash.com/photo-1624996379671-b1b9c8793e4d?auto=format&fit=crop&w=900&q=80" class="w-full h-56 object-cover" alt="Portfolio v1 preview">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
-            <h4 class="text-white text-lg font-semibold">Portfolio v1</h4>
-            <p class="text-sm text-gray-300 mt-1">HTML · CSS · JS</p>
-            <span class="mt-3 text-orange-400 font-semibold" data-i18n="view-project">View project →</span>
+          <img src="https://images.unsplash.com/photo-1624996379671-b1b9c8793e4d?auto=format&fit=crop&w=900&q=80" class="w-full h-48 sm:h-56 object-cover" alt="Portfolio v1">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4 sm:p-6">
+            <h4 class="text-white text-base sm:text-lg font-semibold">Portfolio v1</h4>
+            <p class="text-sm text-gray-300 mt-1">Early Storytelling Layout</p>
+            <a href="https://github.com/yourusername/portfolio-v1" target="_blank" rel="noopener noreferrer"
+               class="mt-3 inline-block bg-orange-500 hover:bg-orange-600 px-2 py-1 rounded-full text-[11px] font-semibold text-white transition-colors icon-hover">
+              Visit Project →
+            </a>
           </div>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- CONTACT (modern glass card) -->
-  <section id="contact" class="relative min-h-[64vh] flex items-center justify-center overflow-hidden">
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-orange-500/18 via-purple-700/12 to-gray-950 animate-gradient-x" style="opacity:0.14"></div>
-    <div class="absolute inset-0 pointer-events-none">
-      <div class="absolute w-2 h-2 bg-orange-400/30 rounded-full blur-xl top-1/3 left-1/4 animate-ping"></div>
-      <div class="absolute w-3 h-3 bg-purple-400/30 rounded-full blur-xl top-2/3 right-1/4 animate-ping"></div>
-      <div class="absolute w-2 h-2 bg-blue-400/30 rounded-full blur-xl top-1/2 left-1/2 animate-pulse"></div>
-    </div>
-
-    <div class="relative z-10 glass rounded-3xl p-10 max-w-xl w-[92%] text-center border border-white/6 shadow-2xl">
-      <h3 class="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent" data-i18n="contact-title">
-        Let’s Build Something Together 🚀
-      </h3>
-      <p class="text-gray-300 mb-8" data-i18n="contact-desc">
+  <!-- CONTACT -->
+  <section id="contact" class="relative py-20 sm:py-28 bg-gradient-to-r from-purple-900/20 via-orange-500/10 to-pink-900/20 animate-gradient-x">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-6" data-i18n="contact-title">Let’s Build Something Together 🚀</h2>
+      <p class="text-gray-300 mb-8 leading-relaxed max-w-2xl mx-auto text-sm sm:text-base" data-i18n="contact-desc">
         I’m open to internships, collaborations, and opportunities where I can grow as a FullStack developer.
       </p>
-      <a href="mailto:merakchioussama@gmail.com" class="inline-block bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 hover:opacity-90 transition-opacity text-white px-8 py-3 rounded-full font-semibold shadow-lg shadow-orange-500/20" data-i18n="say-hello">
-        ✉️ Say Hello
-      </a>
-      <div class="mt-10 flex justify-center gap-6">
-        <a href="https://github.com/beerandbytes" target="_blank" class="icon-hover text-3xl text-gray-200"><i class="fa-brands fa-github"></i></a>
-        <a href="https://linkedin.com/in/merakchioussama" target="_blank" class="icon-hover text-3xl text-gray-200"><i class="fa-brands fa-linkedin"></i></a>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+        <a href="mailto:ousama.merrakchi@example.com" class="bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-full font-semibold text-white transition-colors" data-i18n="say-hello">✉️ Say Hello</a>
+        <a href="https://linkedin.com/in/ousama-merrakchi" target="_blank" rel="noopener" class="bg-gray-800 hover:bg-gray-700 px-6 py-3 rounded-full font-semibold text-white transition-colors">LinkedIn</a>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER (blends with contact gradient) -->
-  <footer class="bg-gradient-to-t from-gray-950 via-gray-900/64 to-transparent border-t border-gray-800">
-    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
-      <p class="text-gray-400" data-i18n="footer">© 2025 Ousama Merrakchi — Crafted with care & curiosity</p>
-      <div class="flex items-center gap-6">
-        <a href="https://github.com/beerandbytes" target="_blank" class="icon-hover text-gray-400 text-xl"><i class="fa-brands fa-github"></i></a>
-        <a href="https://linkedin.com/in/merakchioussama" target="_blank" class="icon-hover text-gray-400 text-xl"><i class="fa-brands fa-linkedin"></i></a>
-      </div>
+  <!-- Project Modal -->
+  <div id="projectModal" class="hidden modal">
+    <div class="modal-content">
+      <button id="closeBtn" class="close-btn">&times;</button>
+      <button id="prevBtn" class="nav-btn">&lt;</button>
+      <button id="nextBtn" class="nav-btn">&gt;</button>
+      <img id="modalImage" class="w-full h-64 object-cover rounded-lg mb-4" alt="Project Image">
+      <h3 id="modalTitle" class="text-xl font-bold mb-2"></h3>
+      <p id="modalDesc" class="text-gray-300 mb-4 text-sm"></p>
+      <div id="modalTech" class="flex gap-2 mb-4 justify-center"></div>
+      <a id="modalVisitBtn" href="#" target="_blank" rel="noopener noreferrer"
+         class="mt-4 inline-block bg-orange-500 hover:bg-orange-600 px-2 py-1 rounded-full text-[11px] font-semibold text-white transition-colors icon-hover hidden">
+        Visit Live Project →
+      </a>
     </div>
+  </div>
+
+  <!-- Build Modal -->
+  <div id="buildModal" class="hidden modal">
+    <div class="modal-content">
+      <button id="closeBuildBtn" class="close-btn">&times;</button>
+      <button id="prevBuildBtn" class="nav-btn">&lt;</button>
+      <button id="nextBuildBtn" class="nav-btn">&gt;</button>
+      <img id="buildModalImage" class="w-full h-64 object-cover rounded-lg mb-4" alt="Build Image">
+      <h3 id="buildModalTitle" class="text-xl font-bold mb-2"></h3>
+      <p id="buildModalDesc" class="text-gray-300 mb-4 text-sm"></p>
+      <a id="buildModalVisitBtn" href="#" target="_blank" rel="noopener noreferrer"
+         class="mt-4 inline-block bg-orange-500 hover:bg-orange-600 px-2 py-1 rounded-full text-[11px] font-semibold text-white transition-colors icon-hover hidden">
+        View Original →
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 border-t border-gray-800 py-8 text-center">
+    <p class="text-gray-400 text-sm" data-i18n="footer">© 2025 Ousama Merrakchi — Crafted with care & curiosity</p>
   </footer>
 
-  <!-- PROJECT MODAL (glassmorphism) -->
-  <div id="projectModal" class="fixed inset-0 hidden items-center justify-center z-50 bg-black/60">
-    <div class="glass rounded-2xl max-w-3xl w-full mx-6 p-6 relative">
-      <button id="closeBtn" class="absolute top-4 right-4 text-gray-200 hover:text-white text-2xl">✕</button>
-      <img id="modalImage" src="" class="w-full max-h-72 object-cover rounded-lg shadow mb-4" alt="">
-      <h4 id="modalTitle" class="text-2xl font-bold mb-2"></h4>
-      <p id="modalDesc" class="text-gray-200 mb-4"></p>
-      <div id="modalTech" class="flex justify-center gap-4 mb-4"></div>
-      <div class="flex justify-between items-center">
-        <button id="prevBtn" class="px-4 py-2 rounded-md bg-white/5 hover:bg-white/10">← Prev</button>
-        <button id="nextBtn" class="px-4 py-2 rounded-md bg-white/5 hover:bg-white/10">Next →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- BUILD MODAL (glassmorphism) -->
-  <div id="buildModal" class="fixed inset-0 hidden items-center justify-center z-50 bg-black/60">
-    <div class="glass rounded-2xl max-w-3xl w-full mx-6 p-6 relative">
-      <button id="closeBuildBtn" class="absolute top-4 right-4 text-gray-200 hover:text-white text-2xl">✕</button>
-      <img id="buildModalImage" src="" class="w-full max-h-72 object-cover rounded-lg shadow mb-4" alt="">
-      <h4 id="buildModalTitle" class="text-2xl font-bold mb-2"></h4>
-      <p id="buildModalDesc" class="text-gray-200 mb-4"></p>
-      <div class="flex justify-between items-center">
-        <button id="prevBuildBtn" class="px-4 py-2 rounded-md bg-white/5 hover:bg-white/10">← Prev</button>
-        <button id="nextBuildBtn" class="px-4 py-2 rounded-md bg-white/5 hover:bg-white/10">Next →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- VANTA + Dependencies (correct order) -->
+  <!-- VANTA JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.birds.min.js"></script>
-  <!-- p5 is required before vanta.trunk -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.trunk.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.trunk.min.js"></script>
 
   <script>
     /* ----------------- VANTA BACKGROUNDS ----------------- */
@@ -575,6 +661,13 @@
         });
       } catch (e) { console.warn('Vanta trunk failed', e); }
     });
+
+    /* ----------------- Mobile Menu ----------------- */
+    function closeMobileMenu() {
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenu.classList.add('hidden');
+      mobileMenu.classList.remove('mobile-menu-enter');
+    }
 
     /* ----------------- Language Translations ----------------- */
     const translations = {
@@ -747,11 +840,6 @@
       }
     }
 
-    // Language switcher
-    document.getElementById('lang-switch').addEventListener('change', (e) => {
-      setLanguage(e.target.value);
-    });
-
     /* ----------------- Project Modal / Work data ----------------- */
     const projects = {
       proj1: {
@@ -761,7 +849,8 @@
           "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
           "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
           "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg"
-        ]
+        ],
+        url: "https://github.com/yourusername/devconnect"  // Replace with actual URL
       },
       proj2: {
         title: "Taskify",
@@ -770,7 +859,8 @@
           "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg",
           "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
           "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"
-        ]
+        ],
+        url: "https://github.com/yourusername/taskify"
       },
       proj3: {
         title: "Portfolio v1",
@@ -779,7 +869,8 @@
           "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
           "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
           "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
-        ]
+        ],
+        url: "https://github.com/yourusername/portfolio-v1"
       }
     };
 
@@ -789,6 +880,7 @@
     const modalTitle = document.getElementById("modalTitle");
     const modalDesc = document.getElementById("modalDesc");
     const modalTech = document.getElementById("modalTech");
+    const modalVisitBtn = document.getElementById("modalVisitBtn");
     let currentKey = null;
 
     function updateModal(key) {
@@ -797,7 +889,11 @@
       modalImage.src = p.image;
       modalTitle.textContent = p.title;
       modalDesc.textContent = desc;
-      modalTech.innerHTML = p.tech.map(src => `<img src="${src}" class='h-6 w-6' alt='tech'>`).join("");
+      modalTech.innerHTML = p.tech.map(src => `<img src="${src}" class="h-6 w-6" alt="tech">`).join("");
+      if (modalVisitBtn) {
+        modalVisitBtn.href = p.url;
+        modalVisitBtn.classList.remove("hidden");
+      }
     }
 
     function openModal(key) {
@@ -814,34 +910,25 @@
       document.body.style.overflow = "";
     }
 
-    document.getElementById("closeBtn").addEventListener("click", closeModal);
-    document.getElementById("nextBtn").addEventListener("click", () => {
-      const keys = Object.keys(projects);
-      currentKey = keys[(keys.indexOf(currentKey) + 1) % keys.length];
-      updateModal(currentKey);
-    });
-    document.getElementById("prevBtn").addEventListener("click", () => {
-      const keys = Object.keys(projects);
-      currentKey = keys[(keys.indexOf(currentKey) - 1 + keys.length) % keys.length];
-      updateModal(currentKey);
-    });
-
     /* ----------------- Build Modal / Builds data ----------------- */
     const builds = {
       build1: {
         title: "Blue and Red Dual PC Build",
         desc: "My early dual-PC setup: a cool blue rig for daily tasks paired with a fiery red beast for gaming and rendering—my first dive into RGB synchronization.",
-        image: "https://i.imgur.com/E7BaYSF.jpeg"
+        image: "https://i.imgur.com/E7BaYSF.jpeg",
+        url: "https://i.imgur.com/E7BaYSF.jpeg"
       },
       build2: {
         title: "Dragon White PC Build",
         desc: "A sleek white chassis with dragon accents, featuring liquid cooling and panoramic glass—balancing minimalism with high-performance airflow.",
-        image: "https://i.imgur.com/YCnpIX8.jpeg"
+        image: "https://i.imgur.com/YCnpIX8.jpeg",
+        url: "https://i.imgur.com/YCnpIX8.jpeg"
       },
       build3: {
         title: "Rick & Morty Green PC Build",
         desc: "Fun meets function: neon green lighting, custom cable management, and pop culture flair with Rick and Morty figures—optimized for creative workflows.",
-        image: "https://i.imgur.com/FwZdrS5.jpeg"
+        image: "https://i.imgur.com/FwZdrS5.jpeg",
+        url: "https://i.imgur.com/FwZdrS5.jpeg"
       }
     };
 
@@ -850,6 +937,7 @@
     const buildModalImage = document.getElementById("buildModalImage");
     const buildModalTitle = document.getElementById("buildModalTitle");
     const buildModalDesc = document.getElementById("buildModalDesc");
+    const buildModalVisitBtn = document.getElementById("buildModalVisitBtn");
     let currentBuildKey = null;
 
     function updateBuildModal(key) {
@@ -857,6 +945,10 @@
       buildModalImage.src = b.image;
       buildModalTitle.textContent = b.title;
       buildModalDesc.textContent = b.desc;
+      if (buildModalVisitBtn) {
+        buildModalVisitBtn.href = b.url;
+        buildModalVisitBtn.classList.remove("hidden");
+      }
     }
 
     function openBuildModal(key) {
@@ -873,16 +965,89 @@
       document.body.style.overflow = "";
     }
 
-    document.getElementById("closeBuildBtn").addEventListener("click", closeBuildModal);
-    document.getElementById("nextBuildBtn").addEventListener("click", () => {
-      const keys = Object.keys(builds);
-      currentBuildKey = keys[(keys.indexOf(currentBuildKey) + 1) % keys.length];
-      updateBuildModal(currentBuildKey);
-    });
-    document.getElementById("prevBuildBtn").addEventListener("click", () => {
-      const keys = Object.keys(builds);
-      currentBuildKey = keys[(keys.indexOf(currentBuildKey) - 1 + keys.length) % keys.length];
-      updateBuildModal(currentBuildKey);
+    document.addEventListener('DOMContentLoaded', () => {
+      // Mobile menu (FIXED: Use explicit if/else for consistent animation handling)
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', () => {
+          if (mobileMenu.classList.contains('hidden')) {
+            // Open: Remove hidden, add animation
+            mobileMenu.classList.remove('hidden');
+            mobileMenu.classList.add('mobile-menu-enter');
+          } else {
+            // Close: Add hidden, remove animation
+            mobileMenu.classList.add('hidden');
+            mobileMenu.classList.remove('mobile-menu-enter');
+          }
+        });
+      }
+
+      // Close mobile menu on language change
+      const langSwitch = document.getElementById('lang-switch');
+      if (langSwitch) {
+        langSwitch.addEventListener('change', (e) => {
+          setLanguage(e.target.value);
+          closeMobileMenu();
+        });
+      }
+
+      // Close mobile menu on window resize to desktop
+      window.addEventListener('resize', () => {
+        if (window.innerWidth >= 768) {
+          closeMobileMenu();
+        }
+      });
+
+      // Project modal events
+      document.getElementById("closeBtn").addEventListener("click", closeModal);
+      document.getElementById("nextBtn").addEventListener("click", () => {
+        const keys = Object.keys(projects);
+        currentKey = keys[(keys.indexOf(currentKey) + 1) % keys.length];
+        updateModal(currentKey);
+      });
+      document.getElementById("prevBtn").addEventListener("click", () => {
+        const keys = Object.keys(projects);
+        currentKey = keys[(keys.indexOf(currentKey) - 1 + keys.length) % keys.length];
+        updateModal(currentKey);
+      });
+
+      // Build modal events
+      document.getElementById("closeBuildBtn").addEventListener("click", closeBuildModal);
+      document.getElementById("nextBuildBtn").addEventListener("click", () => {
+        const keys = Object.keys(builds);
+        currentBuildKey = keys[(keys.indexOf(currentBuildKey) + 1) % keys.length];
+        updateBuildModal(currentBuildKey);
+      });
+      document.getElementById("prevBuildBtn").addEventListener("click", () => {
+        const keys = Object.keys(builds);
+        currentBuildKey = keys[(keys.indexOf(currentBuildKey) - 1 + keys.length) % keys.length];
+        updateBuildModal(currentBuildKey);
+      });
+
+      // Timeline reveal animation
+      const nodeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('show');
+        });
+      }, { threshold: 0.18 });
+      document.querySelectorAll('.timeline-node').forEach(n => nodeObserver.observe(n));
+
+      // Section fade in
+      const sections = document.querySelectorAll('section');
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('opacity-100','transition','duration-700');
+          else entry.target.classList.remove('opacity-100');
+        });
+      }, { threshold: 0.12 });
+      sections.forEach(s => {
+        s.classList.add('opacity-0');
+        sectionObserver.observe(s);
+      });
+
+      // Initialize language
+      setLanguage('en');
     });
 
     /* ----------------- Keyboard Navigation (shared for both modals) ----------------- */
@@ -903,35 +1068,6 @@
 
     modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
     buildModal.addEventListener("click", e => { if (e.target === buildModal) closeBuildModal(); });
-
-    /* ----------------- Timeline reveal animation ----------------- */
-    const timelineNodes = document.querySelectorAll('.timeline-node');
-    const nodeObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('show');
-      });
-    }, { threshold: 0.18 });
-
-    // Observe after DOM ready
-    window.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.timeline-node').forEach(n => nodeObserver.observe(n));
-    });
-
-    /* ----------------- Small UX: fade sections in on scroll ----------------- */
-    const sections = document.querySelectorAll('section');
-    const sectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('opacity-100','transition','duration-700');
-        else entry.target.classList.remove('opacity-100');
-      });
-    }, { threshold: 0.12 });
-    sections.forEach(s => {
-      s.classList.add('opacity-0');
-      sectionObserver.observe(s);
-    });
-
-    // Initialize language
-    setLanguage('en');
   </script>
 </body>
 </html>
