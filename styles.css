@@ -1,0 +1,185 @@
+html { scroll-behavior: smooth; }
+body { background-color: #0b0b0d; } /* fallback */
+/* glass style (reused across modal & timeline cards) */
+.glass {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+.glass:hover { transform: translateY(-4px); box-shadow: 0 14px 40px rgba(0,0,0,0.65); }
+
+/* gradient animation used in contact section */
+@keyframes gradient-x {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.animate-gradient-x { background-size: 200% 200%; animation: gradient-x 10s ease infinite; }
+
+/* Icon hover glow */
+.icon-hover {
+  transition: transform 0.28s ease, text-shadow 0.28s ease, color 0.28s ease;
+}
+.icon-hover:hover {
+  color: #ff915f;
+  transform: scale(1.05);
+  text-shadow: 0 0 10px rgba(255,145,95,0.45);
+  box-shadow: 0 4px 12px rgba(255,145,95,0.3);
+}
+
+/* Timeline visuals */
+.timeline {
+  position: relative;
+  padding-left: 3rem; /* room for dot */ }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 1.5rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.04), rgba(255,255,255,0.08));
+  border-radius: 2px;
+}
+.timeline-node {
+  position: relative;
+  margin-bottom: 2.5rem;
+  padding-left: 0.75rem;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.64s cubic-bezier(.2,.9,.2,1), transform 0.64s cubic-bezier(.2,.9,.2,1);
+}
+.timeline-node.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.node-dot {
+  position: absolute;
+  left: 1.5rem;
+  top: 0.8rem;
+  height: 14px;
+  width: 14px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 30% 30%, #ffd0b3, #ff8a44);
+  box-shadow: 0 10px 26px rgba(255,138,68,0.12), 0 2px 6px rgba(0,0,0,0.6);
+  transform: translateX(-50%);
+  border: 3px solid rgba(11,11,13,0.6);
+}
+.node-card {
+  margin-left: 3.5rem;
+}
+
+/* Skills section styles inspired by image */
+.skills-section {
+  background-color: #000;
+  position: relative;
+  overflow: hidden;
+}
+.skills-section::before,
+.skills-section::after {
+  content: '';
+  position: absolute;
+  background-color: #ffd700;
+  width: 200px;
+  height: 200px;
+  z-index: 1;
+}
+.skills-section::before {
+  top: 0;
+  left: 0;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  transform: scaleX(-1);
+}
+.skills-section::after {
+  bottom: 0;
+  right: 0;
+  clip-path: polygon(0 100%, 100% 100%, 100% 0);
+}
+.skills-content {
+  position: relative;
+  z-index: 2;
+}
+.skill-card {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.skill-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+}
+.skill-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 0.5rem;
+}
+
+/* responsive tweaks */
+@media (max-width: 640px) {
+  .timeline { padding-left: 2.25rem; }
+  .timeline::before { left: 1.25rem; }
+  .node-card { margin-left: 2.75rem; }
+  .node-dot { left: 1.25rem; }
+  .skills-section::before,
+  .skills-section::after {
+    width: 100px;
+    height: 100px;
+  }
+  /* Enhance navbar visibility on mobile */
+  #mobile-menu {
+    background-color: #111827 !important;
+  }
+  .mobile-menu-enter {
+    animation: slideDown 0.3s ease-out;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* Modal styles */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.close-btn:hover { color: #ff915f; }
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.nav-btn:hover { background: rgba(255,145,95,0.2); }
+#prevBtn { left: 1rem; }
+#nextBtn { right: 1rem; }
