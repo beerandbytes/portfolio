@@ -50,13 +50,15 @@ const translations = {
     'nav-story': 'My Story',
     'nav-skills': 'Skills',
     'nav-experience': 'Experience',
-    'nav-work': 'Work',
+    'nav-work': 'Projects',
     'nav-contact': 'Contact',
     'hero-greeting': 'Hey, I’m <span class="text-orange-400">Ousama</span> 👋',
     'hero-desc': 'Currently Junior Web Dev / Ex Sales and Key account Manager / Ex Assembly Computer Technician — I am seeking new opportunities to start in the web development industry , performance and attention to detail.',
     'see-work': 'See My Work ↓',
     'story-title': 'My Story',
     'story-desc': 'I discovered the web by tinkering with small projects and later combined commercial experience with FullStack training. I focus on bringing product sense, performance and thoughtful UX to projects.',
+    'builds-header': 'My Past PC Builds',
+    'builds-desc': 'From early custom rigs that sparked my passion for hardware to current setups blending aesthetics and performance—each build tells a chapter in my tech journey.',
     'skills-title': 'What I Do',
     'skills-desc': 'I am a FullStack developer with a background in business management and sales. I combine commercial experience with technical skills to build performant web applications. Currently transitioning fully into development while freelancing on exciting projects.',
     'exp-title': 'Experience',
@@ -93,13 +95,15 @@ const translations = {
     'nav-story': 'Mi Historia',
     'nav-skills': 'Habilidades',
     'nav-experience': 'Experiencia',
-    'nav-work': 'Trabajo',
+    'nav-work': 'Proyectos',
     'nav-contact': 'Contacto',
     'hero-greeting': '¡Hola, soy <span class="text-orange-400">Ousama</span>! 👋',
     'hero-desc': 'Actualmente soy Desarrollador Web Junior / Ex Comercial y Gerente de Cuentas Clave / Ex Técnico de montaje de ordenadores. Busco nuevas oportunidades para comenzar mi carrera en la industria del desarrollo web, con enfoque en el rendimiento y la atención al detalle.',
     'see-work': 'Ver Mi Trabajo ↓',
     'story-title': 'Mi Historia',
-    'story-desc': 'Descubrí la web tinkereando con pequeños proyectos y luego combiné experiencia comercial con formación FullStack. Me enfoco en aportar visión de producto, rendimiento y UX pensada a los proyectos.',
+    'story-desc': 'Descubrí el desarrollo trasteando con pequeños proyectos y luego apliqué un poco de mi experiencia comercial para ayudarme con mis tareas diarias. Me enfoco en aportar visión de producto, rendimiento y UX pensada a los proyectos.',
+    'builds-header': 'Mis Construcciones de PC Pasadas',
+    'builds-desc': 'Desde rigs personalizados tempranos que encendieron mi pasión por el hardware hasta configuraciones actuales que combinan estética y rendimiento—cada build cuenta un capítulo en mi viaje tecnológico.',
     'skills-title': 'Qué Hago',
     'skills-desc': 'Soy un desarrollador FullStack con experiencia en gestión empresarial y ventas. Combino experiencia comercial con habilidades técnicas para construir aplicaciones web de alto rendimiento. Actualmente en transición completa hacia el desarrollo mientras freelance en proyectos emocionantes.',
     'exp-title': 'Experiencia',
@@ -142,7 +146,9 @@ const translations = {
     'hero-desc': 'Actuellement je suis Développeur Web Junior / Ancien Commercial et Responsable Grands Comptes / Ancien Technicien Informatique de montage de pc bureau . Je suis à la recherche de nouvelles opportunités pour démarrer dans le secteur du développement web, en mettant en priorité la performance et le soin aux détails.',
     'see-work': 'Voir Mon Travail ↓',
     'story-title': 'Mon Histoire',
-    'story-desc': "J'ai découvert le web en bidouillant de petits projets et j'ai ensuite combiné mon expérience commerciale avec une formation FullStack. Je me concentre sur l'apport de sens produit, performance et UX réfléchie aux projets.",
+    'story-desc': "J'ai découvert le development web en bidouillant de petits projets et j'ai ensuite combiné mon expérience commerciale avec une formation FullStack. Je me concentre sur l'apport de sens produit, performance et UX réfléchie aux projets.",
+    'builds-header': 'Mes Anciennes Configurations PC',
+    'builds-desc': 'Des rigs personnalisés précoces qui ont éveillé ma passion pour le hardware aux setups actuels mêlant esthétique et performance—chaque build raconte un chapitre de mon parcours tech.',
     'skills-title': 'Ce Que Je Fais',
     'skills-desc': 'Je suis un développeur FullStack avec un parcours en gestion d\'entreprise et en ventes. J\'associe expérience commerciale et compétences techniques pour créer des applications web performantes. Actuellement en pleine transition vers le développement tout en freelance sur des projets passionnants.',
     'exp-title': 'Expérience',
@@ -194,6 +200,79 @@ const descs = {
   }
 };
 
+// New: Translations for builds (titles for cards/modals, subtitles for cards, desc for modals)
+const buildTranslations = {
+  en: {
+    build1: {
+      title: 'Blue and Red Dual PC Build',
+      subtitle: 'RGB Harmony',
+      desc: 'My early dual-PC setup: a cool blue rig for daily tasks paired with a fiery red beast for gaming and rendering—my first dive into RGB synchronization.',
+      image: 'https://i.imgur.com/E7BaYSF.jpeg',
+      url: 'https://i.imgur.com/E7BaYSF.jpeg'
+    },
+    build2: {
+      title: 'Dragon White PC Build',
+      subtitle: 'Elegant Fury',
+      desc: 'A sleek white chassis with dragon accents, featuring liquid cooling and panoramic glass—balancing minimalism with high-performance airflow.',
+      image: 'https://i.imgur.com/YCnpIX8.jpeg',
+      url: 'https://i.imgur.com/YCnpIX8.jpeg'
+    },
+    build3: {
+      title: 'Rick & Morty Green PC Build',
+      subtitle: 'Portal Gun Vibes',
+      desc: 'Fun meets function: neon green lighting, custom cable management, and pop culture flair with Rick and Morty figures—optimized for creative workflows.',
+      image: 'https://i.imgur.com/FwZdrS5.jpeg',
+      url: 'https://i.imgur.com/FwZdrS5.jpeg'
+    }
+  },
+  es: {
+    build1: {
+      title: 'Construcción Dual de PC Azul y Rojo',
+      subtitle: 'Armonía RGB',
+      desc: 'Mi configuración dual de PC inicial: un rig azul fresco para tareas diarias emparejado con una bestia roja ardiente para juegos y renderizado—mi primera inmersión en la sincronización RGB.',
+      image: 'https://i.imgur.com/E7BaYSF.jpeg',
+      url: 'https://i.imgur.com/E7BaYSF.jpeg'
+    },
+    build2: {
+      title: 'Construcción de PC Blanca Dragón',
+      subtitle: 'Furia Elegante',
+      desc: 'Un chasis blanco elegante con acentos de dragón, con refrigeración líquida y vidrio panorámico—equilibrando minimalismo con flujo de aire de alto rendimiento.',
+      image: 'https://i.imgur.com/YCnpIX8.jpeg',
+      url: 'https://i.imgur.com/YCnpIX8.jpeg'
+    },
+    build3: {
+      title: 'Construcción de PC Verde Rick & Morty',
+      subtitle: 'Vibras de Pistola Portal',
+      desc: 'Diversión y función se encuentran: iluminación verde neón, gestión de cables personalizada y estilo pop con figuras de Rick y Morty—optimizado para flujos de trabajo creativos.',
+      image: 'https://i.imgur.com/FwZdrS5.jpeg',
+      url: 'https://i.imgur.com/FwZdrS5.jpeg'
+    }
+  },
+  fr: {
+    build1: {
+      title: 'Construction Dual PC Bleu et Rouge',
+      subtitle: 'Harmonie RGB',
+      desc: "Ma configuration dual-PC initiale : un rig bleu cool pour les tâches quotidiennes associé à une bête rouge ardente pour les jeux et le rendu—ma première plongée dans la synchronisation RGB.",
+      image: 'https://i.imgur.com/E7BaYSF.jpeg',
+      url: 'https://i.imgur.com/E7BaYSF.jpeg'
+    },
+    build2: {
+      title: 'Construction PC Blanc Dragon',
+      subtitle: 'Furie Élégante',
+      desc: 'Un châssis blanc élégant avec accents de dragon, doté de refroidissement liquide et de verre panoramique—équilibrant minimalisme et flux d\'air haute performance.',
+      image: 'https://i.imgur.com/YCnpIX8.jpeg',
+      url: 'https://i.imgur.com/YCnpIX8.jpeg'
+    },
+    build3: {
+      title: 'Construction PC Vert Rick & Morty',
+      subtitle: 'Vibes Pistolet Portal',
+      desc: 'Le fun rencontre la fonction : éclairage vert néon, gestion de câbles personnalisée et style pop culture avec figurines Rick et Morty—optimisé pour les workflows créatifs.',
+      image: 'https://i.imgur.com/FwZdrS5.jpeg',
+      url: 'https://i.imgur.com/FwZdrS5.jpeg'
+    }
+  }
+};
+
 let currentLang = 'en';
 
 function setLanguage(lang) {
@@ -203,6 +282,12 @@ function setLanguage(lang) {
     const key = el.dataset.i18n;
     if (translations[lang] && translations[lang][key]) {
       el.innerHTML = translations[lang][key];
+    } else if (buildTranslations[lang] && key.startsWith('build') && (key.endsWith('-title') || key.endsWith('-subtitle'))) {
+      // Handled by buildTranslations for build-specific keys
+      const [buildId, type] = key.split('-');
+      if (buildTranslations[lang][buildId] && buildTranslations[lang][buildId][type]) {
+        el.innerHTML = buildTranslations[lang][buildId][type];
+      }
     }
   });
   // Update modal if open
@@ -222,7 +307,7 @@ const projects = {
     tech: [
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
-      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg"
+      "https://raw.githubusercontent.com/devicons/devicon/54cfe13ac10eaa1ef817a343ab0a9437eb3c2e08/icons/tailwindcss/tailwindcss-original.svg"
     ],
     url: "https://github.com/yourusername/devconnect"  // Replace with actual URL
   },
@@ -238,7 +323,7 @@ const projects = {
   },
   proj3: {
     title: "Portfolio v1",
-    image: "https://images.unsplash.com/photo-1624996379671-b1b9c8793e4d?auto=format&fit=crop&w=900&q=80",
+    image: "https://i.imgur.com/QY1MgBy.jpeg",
     tech: [
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
@@ -284,28 +369,7 @@ function closeModal() {
   document.body.style.overflow = "";
 }
 
-/* ----------------- Build Modal / Builds data ----------------- */
-const builds = {
-  build1: {
-    title: "Blue and Red Dual PC Build",
-    desc: "My early dual-PC setup: a cool blue rig for daily tasks paired with a fiery red beast for gaming and rendering—my first dive into RGB synchronization.",
-    image: "https://i.imgur.com/E7BaYSF.jpeg",
-    url: "https://i.imgur.com/E7BaYSF.jpeg"
-  },
-  build2: {
-    title: "Dragon White PC Build",
-    desc: "A sleek white chassis with dragon accents, featuring liquid cooling and panoramic glass—balancing minimalism with high-performance airflow.",
-    image: "https://i.imgur.com/YCnpIX8.jpeg",
-    url: "https://i.imgur.com/YCnpIX8.jpeg"
-  },
-  build3: {
-    title: "Rick & Morty Green PC Build",
-    desc: "Fun meets function: neon green lighting, custom cable management, and pop culture flair with Rick and Morty figures—optimized for creative workflows.",
-    image: "https://i.imgur.com/FwZdrS5.jpeg",
-    url: "https://i.imgur.com/FwZdrS5.jpeg"
-  }
-};
-
+/* ----------------- Build Modal ----------------- */
 /* Build Modal elements */
 const buildModal = document.getElementById("buildModal");
 const buildModalImage = document.getElementById("buildModalImage");
@@ -315,7 +379,7 @@ const buildModalVisitBtn = document.getElementById("buildModalVisitBtn");
 let currentBuildKey = null;
 
 function updateBuildModal(key) {
-  const b = builds[key];
+  const b = buildTranslations[currentLang][key];
   buildModalImage.src = b.image;
   buildModalTitle.textContent = b.title;
   buildModalDesc.textContent = b.desc;
@@ -389,12 +453,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Build modal events
   document.getElementById("closeBuildBtn").addEventListener("click", closeBuildModal);
   document.getElementById("nextBuildBtn").addEventListener("click", () => {
-    const keys = Object.keys(builds);
+    const keys = Object.keys(buildTranslations[currentLang]);
     currentBuildKey = keys[(keys.indexOf(currentBuildKey) + 1) % keys.length];
     updateBuildModal(currentBuildKey);
   });
   document.getElementById("prevBuildBtn").addEventListener("click", () => {
-    const keys = Object.keys(builds);
+    const keys = Object.keys(buildTranslations[currentLang]);
     currentBuildKey = keys[(keys.indexOf(currentBuildKey) - 1 + keys.length) % keys.length];
     updateBuildModal(currentBuildKey);
   });
