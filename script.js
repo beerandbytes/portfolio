@@ -172,7 +172,7 @@ const translations = {
     'job-title-6': 'STAGIAIRE BACKEND | JMI BRUSSELS',
     'bullet-6-1': 'Conception de base de données.',
     'bullet-6-2': 'Développé des prototypes pour des projets web et mobile.',
-    'featured-projects': 'Projets Phares',
+    'featured-projects': 'Projets Achevés',
     'view-project': 'Voir le projet →',
     'view-build': 'Voir le build →',
     'contact-title': 'Construisons Quelque Chose Ensemble 🚀',
@@ -185,17 +185,17 @@ const translations = {
 const descs = {
   en: {
     proj1: 'A social hub for developers to share projects and collaborate.',
-    proj2: 'A productivity app focused on simplicity and animation fluidity.',
-    proj3: 'My first portfolio experiment focused on storytelling and layout.'
+    proj2: 'My first attempt to make an online version of my cv.',
+    proj3: 'My first website experiment focused on storytelling and layout.'
   },
   es: {
     proj1: 'Un hub social para desarrolladores donde compartir proyectos y colaborar.',
-    proj2: 'Una app de productividad enfocada en la simplicidad y la fluidez de las animaciones.',
+    proj2: 'Mi primer inento en realizar una versión de mi curriculum en línea.',
     proj3: 'Mi primer experimento de portfolio enfocado en la narración y el diseño.'
   },
   fr: {
     proj1: 'Un hub social pour les développeurs pour partager des projets et collaborer.',
-    proj2: 'Une app de productivité axée sur la simplicité et la fluidité des animations.',
+    proj2: 'Mon premier essai de faire une version en ligne de mon cv.',
     proj3: 'Mon premier essai de portfolio axé sur le storytelling et la mise en page.'
   }
 };
@@ -312,24 +312,24 @@ const projects = {
     url: "https://github.com/yourusername/devconnect"  // Replace with actual URL
   },
   proj2: {
-    title: "Taskify",
-    image: "https://images.unsplash.com/photo-1551033406-611cf9a28f67?auto=format&fit=crop&w=900&q=80",
+    title: "Portfolio",
+    image: "https://i.imgur.com/eUYSOvd.jpeg",
     tech: [
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg",
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"
     ],
-    url: "https://github.com/yourusername/taskify"
+    url: "https://beerandbytes.github.io/"
   },
   proj3: {
-    title: "Portfolio v1",
+    title: "WebCorp",
     image: "https://i.imgur.com/QY1MgBy.jpeg",
     tech: [
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
     ],
-    url: "https://github.com/yourusername/portfolio-v1"
+    url: "https://beerandbytes.github.io/trabajo_js/"
   }
 };
 
