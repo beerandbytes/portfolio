@@ -184,17 +184,17 @@ const translations = {
 
 const descs = {
   en: {
-    proj1: 'A social hub for developers to share projects and collaborate.',
+    proj1: 'TBA.',
     proj2: 'My first attempt to make an online version of my cv.',
     proj3: 'My first website experiment focused on storytelling and layout.'
   },
   es: {
-    proj1: 'Un hub social para desarrolladores donde compartir proyectos y colaborar.',
+    proj1: 'TBA.',
     proj2: 'Mi primer inento en realizar una versión de mi curriculum en línea.',
     proj3: 'Mi primer experimento de portfolio enfocado en la narración y el diseño.'
   },
   fr: {
-    proj1: 'Un hub social pour les développeurs pour partager des projets et collaborer.',
+    proj1: 'TBA.',
     proj2: 'Mon premier essai de faire une version en ligne de mon cv.',
     proj3: 'Mon premier essai de portfolio axé sur le storytelling et la mise en page.'
   }
@@ -302,14 +302,14 @@ function setLanguage(lang) {
 /* ----------------- Project Modal / Work data ----------------- */
 const projects = {
   proj1: {
-    title: "DevConnect",
-    image: "https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&fit=crop&w=900&q=80",
+    title: "TBA",
+    image: "https://placehold.co/600x400/000000/FFF?text=TBA",
     tech: [
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
       "https://raw.githubusercontent.com/devicons/devicon/54cfe13ac10eaa1ef817a343ab0a9437eb3c2e08/icons/tailwindcss/tailwindcss-original.svg"
     ],
-    url: "https://github.com/yourusername/devconnect"  // Replace with actual URL
+    url: "https://github.com/yourusername/tba"  // Replace with actual URL
   },
   proj2: {
     title: "Portfolio",
