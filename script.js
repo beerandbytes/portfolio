@@ -53,7 +53,7 @@ const translations = {
     'nav-work': 'Projects',
     'nav-contact': 'Contact',
     'hero-greeting': 'Hey, I’m <span class="text-orange-400">Ousama</span> 👋',
-    'hero-desc': 'Currently Junior Web Dev / Ex Sales and Key account Manager / Ex Assembly Computer Technician — I am seeking new opportunities to start in the web development industry , performance and attention to detail.',
+    'hero-desc': 'Currently Junior Web Dev / Ex Sales and Key account Manager / Ex Assembly Computer Technician — I am seeking new opportunities to start in the web development industry ,trying to maintain performance and attention to detail.',
     'see-work': 'See My Work ↓',
     'story-title': 'My Story',
     'story-desc': 'I discovered the web by tinkering with small projects and later combined commercial experience with FullStack training. I focus on bringing product sense, performance and thoughtful UX to projects.',
